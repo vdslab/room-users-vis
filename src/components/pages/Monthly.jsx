@@ -1,6 +1,6 @@
 
 
-export const MonthlyPage = () => {
+export const Monthly = () => {
   return (
     <div className="a">
 
