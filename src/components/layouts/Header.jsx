@@ -1,4 +1,4 @@
-import { LinkButton } from '@/common/LinkButton';
+import { LinkButton } from '@/components/common/LinkButton';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -26,7 +26,7 @@ export const Header = () => {
 
           {buttons.map((value) => {
             return(
-              <LinkButton navigation={`/${value}`} btnStyle={btnStyle} btnText={value} />
+              <LinkButton navigation={`/${value}`} btnStyle={btnStyle} btnText={value} key={value} />
             )
           })}
 
