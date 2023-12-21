@@ -1,8 +1,3 @@
-
-
-export default function weeklyPage () {
-  return (
-    <>
-    </>
-  )
+export default function weeklyPage() {
+  return <></>;
 }

@@ -1,7 +1,3 @@
-
-export default function MonthlyDayPage () {
-  return (
-    <>
-    </>
-  )
+export default function MonthlyDayPage() {
+  return <></>;
 }
