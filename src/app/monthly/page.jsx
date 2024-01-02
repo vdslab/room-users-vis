@@ -11,11 +11,11 @@ export default function MonthlyPage() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={6}>
+      <Grid item xs={7}>
         <Calender />
       </Grid>
 
-      <Grid container item xs={6}>
+      <Grid container item xs={5}>
         <Grid item xs={12}>
           <Text message={`${month}月に来た日数ランキング`} />
         </Grid>
