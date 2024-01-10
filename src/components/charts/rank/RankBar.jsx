@@ -3,8 +3,12 @@ import { Text } from "@/components/common/Text";
 import Avatar from "@mui/material/Avatar";
 import { RectSVG } from "./RectSVG";
 import { useRouter } from "next/navigation";
+import { Typography } from "@mui/material";
 
-export const RankBar = () => {
+export const RankBar = (props) => {
+
+  const { maxTotal, data, index } = props;
+  console.log(props)
 
   const router = useRouter()
 
@@ -16,12 +20,12 @@ export const RankBar = () => {
 
   return (
     <div className="flex m-5 space-x-2">
-      <Text message="1" />
+      <Text message={index+1} />
       <div onClick={onAvatarClick}>
-        <Avatar />
+        <Avatar ><Typography sx={{ fontSize:10 }}>{data.studentName}</Typography></Avatar>
       </div>
-      <RectSVG />
-      <Text message='10日' />
+      <RectSVG max={maxTotal} total={data.totalDays} />
+      <Text message={data.totalDays+'日'} />
     </div>
   );
 };
