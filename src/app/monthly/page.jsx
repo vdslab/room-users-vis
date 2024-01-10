@@ -1,13 +1,23 @@
+'use client'
 import { Calender } from "@/components/charts/Calender";
 import { RankBar } from "@/components/charts/rank/RankBar";
 import { Text } from "@/components/common/Text";
 import { ToggleGroup } from "@/app/monthly/ToggleGroup";
 import { Card, Grid, Typography } from "@mui/material";
+import { useState } from "react";
 
 export default function MonthlyPage() {
+
+  const [timeUnit, setTimeUnit] = useState('日数');
+
   const now = new Date();
 
   const month = now.getMonth() + 1;
+
+  const toggleHandler = (event, unit) => {
+    setTimeUnit(unit);
+  }
+
 
   return (
     <Grid container spacing={2}>
@@ -21,7 +31,7 @@ export default function MonthlyPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <ToggleGroup nav="/monthly/day" />
+          <ToggleGroup toggleHandler={toggleHandler} timeUnit={timeUnit} />
         </Grid>
 
         <Grid item xs={12}>
