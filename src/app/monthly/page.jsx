@@ -15,17 +15,20 @@ export default function MonthlyPage() {
     { length: now.getFullYear() - 2023 + 1 },
     (_, i) => i + 2023,
   );
-  const [year, setYear] = useState(yearOptions[0]);
+  const [year, setYear] = useState(now.getFullYear());
 
   const [monthOptions, setMonthOptions] = useState(
     Array.from({ length: 12 }, (_, i) => i + 1),
   );
+
+  const [month, setMonth] = useState(now.getMonth() + 1);
 
   useEffect(() => {
     if (year === now.getFullYear()) {
       setMonthOptions(
         Array.from({ length: now.getMonth() + 1 }, (_, i) => i + 1),
       );
+      setMonth(now.getMonth() + 1);
     } else if (year === 2023) {
       setMonthOptions([12]);
       setMonth(12);
@@ -33,8 +36,6 @@ export default function MonthlyPage() {
       setMonthOptions(Array.from({ length: 12 }, (_, i) => i + 1));
     }
   }, [year]);
-
-  const [month, setMonth] = useState(now.getMonth() + 1);
 
   const toggleHandler = (event, unit) => {
     setTimeUnit(unit);
