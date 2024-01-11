@@ -26,6 +26,9 @@ export default function MonthlyPage() {
       setMonthOptions(
         Array.from({ length: now.getMonth() + 1 }, (_, i) => i + 1),
       );
+    } else if (year === 2023) {
+      setMonthOptions([12]);
+      setMonth(12);
     } else {
       setMonthOptions(Array.from({ length: 12 }, (_, i) => i + 1));
     }
@@ -36,8 +39,6 @@ export default function MonthlyPage() {
   const toggleHandler = (event, unit) => {
     setTimeUnit(unit);
   };
-
-  console.log(TEST_DATA);
 
   const data = filterByYearMonth(TEST_DATA, year, month);
 
