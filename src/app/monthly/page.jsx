@@ -11,8 +11,13 @@ export default function MonthlyPage() {
   const [timeUnit, setTimeUnit] = useState("日数");
 
   const now = new Date();
+  const yearOptions = [2024, 2023];
+  const [year, setYear] = useState(yearOptions[0]);
 
-  const month = now.getMonth() + 1;
+  const [monthOptions, setMonthOptions] = useState(
+    Array.from({ length: now.getMonth() + 1 }, (_, i) => i + 1),
+  );
+  const [month, setMonth] = useState(now.getMonth() + 1);
 
   const toggleHandler = (event, unit) => {
     setTimeUnit(unit);
@@ -20,7 +25,7 @@ export default function MonthlyPage() {
 
   console.log(TEST_DATA);
 
-  const data = TEST_DATA;
+  const data = filterByYearMonth(TEST_DATA, year, month);
 
   const entranceCounts = {};
 
@@ -61,7 +66,18 @@ export default function MonthlyPage() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={7}>
-        <Calender />
+        <Calender
+          options={yearOptions}
+          setValue={setYear}
+          value={year}
+          label="年"
+        />
+        <Calender
+          options={monthOptions}
+          setValue={setMonth}
+          value={month}
+          label="月"
+        />
       </Grid>
 
       <Grid container item xs={5}>
@@ -81,4 +97,14 @@ export default function MonthlyPage() {
       </Grid>
     </Grid>
   );
+}
+
+// TEST_DATAから、年月のフィルターをかける
+function filterByYearMonth(data, year, month) {
+  return data.filter((entry) => {
+    const entryTime = new Date(entry["日時"]);
+    return (
+      entryTime.getFullYear() === year && entryTime.getMonth() + 1 === month
+    );
+  });
 }
