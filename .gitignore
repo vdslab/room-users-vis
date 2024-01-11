@@ -1,3 +1,5 @@
+/postgres_data/
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -34,3 +36,53 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# This gitignore file is used only internally for this repository,
+# you should not use this in your own projects. Instead, navigate into
+# an example folder and use the folder as the project root (it also contains a
+# projects-specific .gitignore).
+
+ode_modules
+
+yarn-error.log
+declaration
+dist
+build
+tmp
+pnpm-debug.log
+.DS_Store
+
+query-engine*
+migration-engine*
+schema-engine*
+libquery_engine*
+libquery-engine*
+query_engine-windows.dll.node
+
+*tmp.db
+dist/
+
+*.tsbuildinfo
+.prisma
+.pnpm-store
+
+.vscode/*
+!.vscode/launch.json.default
+!.vscode/extensions.json
+coverage
+
+.eslintcache
+
+.pnpm-debug.log
+
+esm
+
+dev.db
+junit.xml
+/output.txt
+
+.envrc.local
+
+.idea/
+
+package.copy.json
