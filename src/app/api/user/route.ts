@@ -4,9 +4,24 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
-  // id: int
-  // name: string
-  const { id, name, icon } = await request.json();
+  let json;
+  try {
+    json = await request.json();
+  } catch (error) {
+    return NextResponse.json(
+      { message: "error. invalid JSON" },
+      { status: 400 },
+    );
+  }
+
+  if (!json) {
+    return NextResponse.json(
+      { message: "error. missing body" },
+      { status: 400 },
+    );
+  }
+
+  const { id, name, icon } = json;
 
   // Check if user exists
   const user = await prisma.user.findUnique({
