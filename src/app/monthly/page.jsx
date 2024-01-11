@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Calender } from "@/components/charts/Calender";
 import { Text } from "@/components/common/Text";
 import { ToggleGroup } from "@/app/monthly/ToggleGroup";
@@ -8,8 +8,7 @@ import { TEST_DATA } from "@/features/TEST";
 import { Rank } from "@/components/charts/rank/Rank";
 
 export default function MonthlyPage() {
-
-  const [timeUnit, setTimeUnit] = useState('日数');
+  const [timeUnit, setTimeUnit] = useState("日数");
 
   const now = new Date();
 
@@ -17,36 +16,47 @@ export default function MonthlyPage() {
 
   const toggleHandler = (event, unit) => {
     setTimeUnit(unit);
-  }
+  };
 
-  console.log(TEST_DATA)
+  console.log(TEST_DATA);
 
   const data = TEST_DATA;
 
   const entranceCounts = {};
 
-  data.forEach((entry) => {
+  for (const entry of data) {
     const studentId = entry["学籍番号"];
     const entryTime = new Date(entry["日時"]);
 
-    const monthKey = entryTime.toISOString().slice(0, 7);
-    entranceCounts[studentId] = entranceCounts[studentId] || {};
-    entranceCounts[studentId][monthKey] = entranceCounts[studentId][monthKey] || new Set();
-    entranceCounts[studentId][monthKey].add(entryTime.toISOString().slice(8, 10));
-  });
+    if (entryTime) {
+      const monthKey = entryTime.toISOString().slice(0, 7);
+      if (!entranceCounts[studentId]) {
+        entranceCounts[studentId] = {};
+      }
+      if (!entranceCounts[studentId][monthKey]) {
+        entranceCounts[studentId][monthKey] = new Set();
+      }
+      entranceCounts[studentId][monthKey].add(
+        entryTime.toISOString().slice(8, 10),
+      );
+    }
+  }
+
+  const studentLookup = Object.fromEntries(
+    data.map((student) => [student["学籍番号"], student["氏名"]]),
+  );
 
   const ranking = Object.entries(entranceCounts)
     .map(([studentId, entranceCounts]) => {
-      const totalDays = Object.values(entranceCounts)
-        .reduce((acc, daySet) => acc + daySet.size, 0);
+      const totalDays = Object.values(entranceCounts).reduce(
+        (acc, daySet) => acc + daySet.size,
+        0,
+      );
 
-      const studentInfo = data.find((entry) => entry["学籍番号"] === studentId);
-      const studentName = studentInfo ? studentInfo["氏名"] : "Unknown";
+      const studentName = studentLookup[studentId] || "Unknown";
       return { studentId, studentName, totalDays };
     })
     .sort((a, b) => b.totalDays - a.totalDays);
-
-
 
   return (
     <Grid container spacing={2}>
@@ -65,7 +75,7 @@ export default function MonthlyPage() {
 
         <Grid item xs={12}>
           <Card variant="outlined" style={{ height: "70vh" }}>
-            <Rank data={ranking}/>
+            <Rank data={ranking} />
           </Card>
         </Grid>
       </Grid>
