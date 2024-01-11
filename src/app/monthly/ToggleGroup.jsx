@@ -7,7 +7,6 @@ import { Text } from "../../components/common/Text";
 export const ToggleGroup = (props) => {
   const { toggleHandler, timeUnit } = props;
 
-
   return (
     <ToggleButtonGroup value={timeUnit} onChange={toggleHandler} exclusive>
       <ToggleButton value="日数">
