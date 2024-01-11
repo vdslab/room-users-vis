@@ -3,7 +3,7 @@ import { Calender } from "@/components/charts/Calender";
 import { Text } from "@/components/common/Text";
 import { ToggleGroup } from "@/app/monthly/ToggleGroup";
 import { Card, Grid, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TEST_DATA } from "@/features/TEST";
 import { Rank } from "@/components/charts/rank/Rank";
 
@@ -11,12 +11,26 @@ export default function MonthlyPage() {
   const [timeUnit, setTimeUnit] = useState("日数");
 
   const now = new Date();
-  const yearOptions = [2024, 2023];
+  const yearOptions = Array.from(
+    { length: now.getFullYear() - 2023 + 1 },
+    (_, i) => i + 2023,
+  );
   const [year, setYear] = useState(yearOptions[0]);
 
   const [monthOptions, setMonthOptions] = useState(
-    Array.from({ length: now.getMonth() + 1 }, (_, i) => i + 1),
+    Array.from({ length: 12 }, (_, i) => i + 1),
   );
+
+  useEffect(() => {
+    if (year === now.getFullYear()) {
+      setMonthOptions(
+        Array.from({ length: now.getMonth() + 1 }, (_, i) => i + 1),
+      );
+    } else {
+      setMonthOptions(Array.from({ length: 12 }, (_, i) => i + 1));
+    }
+  }, [year]);
+
   const [month, setMonth] = useState(now.getMonth() + 1);
 
   const toggleHandler = (event, unit) => {
