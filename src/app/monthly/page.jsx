@@ -8,8 +8,7 @@ import { TEST_DATA } from "@/features/TEST";
 import { Rank } from "@/components/charts/rank/Rank";
 
 export default function MonthlyPage() {
-
-  const [timeUnit, setTimeUnit] = useState('日数');
+  const [timeUnit, setTimeUnit] = useState("日数");
 
   const now = new Date();
   const yearOptions = Array.from(
@@ -80,65 +79,64 @@ export default function MonthlyPage() {
     })
     .sort((a, b) => b.totalDays - a.totalDays);
 
+  const roomTimeData = {};
 
-    const roomTimeData = {};
+  data.forEach((entry) => {
+    const studentId = entry["学籍番号"];
+    const studentName = entry["氏名"];
+    const entryTime = new Date(entry["日時"]);
+    const isEntrance = entry["入退出状態"] === "入室状態";
 
-    data.forEach((entry) => {
-      const studentId = entry["学籍番号"];
-      const studentName = entry["氏名"];
-      const entryTime = new Date(entry["日時"]);
-      const isEntrance = entry["入退出状態"] === "入室状態";
-    
-      if (isEntrance) {
-        if (!roomTimeData[studentId]) {
-          roomTimeData[studentId] = {
-            studentName,
-            totalTimeSpent: 0,
-            days: {},
-          };
-        }
-        roomTimeData[studentId].entranceTime = entryTime;
-      } else {
-        if (roomTimeData[studentId] && roomTimeData[studentId].entranceTime) {
-          const exitTime = entryTime;
-          const timeSpent = exitTime - roomTimeData[studentId].entranceTime;
-    
-          const dayKey = entryTime.toISOString().slice(0, 10);
-          roomTimeData[studentId].days[dayKey] = (roomTimeData[studentId].days[dayKey] || 0) + timeSpent;
-          roomTimeData[studentId].totalTimeSpent += timeSpent;
-    
-          roomTimeData[studentId].entranceTime = null;
-        }
+    if (isEntrance) {
+      if (!roomTimeData[studentId]) {
+        roomTimeData[studentId] = {
+          studentName,
+          totalTimeSpent: 0,
+          days: {},
+        };
       }
-    });
+      roomTimeData[studentId].entranceTime = entryTime;
+    } else {
+      if (roomTimeData[studentId] && roomTimeData[studentId].entranceTime) {
+        const exitTime = entryTime;
+        const timeSpent = exitTime - roomTimeData[studentId].entranceTime;
 
-const timeSpentRanking = Object.entries(roomTimeData)
-  .map(([studentId, data]) => {
-    const totalTimeSpent = Object.entries(data.days)
-      .filter(([dayKey]) => dayKey.startsWith(`2023-${month}`))
-      .reduce((acc, [, dayTotalTime]) => acc + dayTotalTime, 0);
+        const dayKey = entryTime.toISOString().slice(0, 10);
+        roomTimeData[studentId].days[dayKey] =
+          (roomTimeData[studentId].days[dayKey] || 0) + timeSpent;
+        roomTimeData[studentId].totalTimeSpent += timeSpent;
 
-    const studentName = data.studentName || "Unknown";
-    const entranceMonth = new Date(data.entranceTime).getMonth() + 1;
+        roomTimeData[studentId].entranceTime = null;
+      }
+    }
+  });
 
-    const monthData = Object.entries(data.days)
-      .filter(([dayKey]) => dayKey.startsWith(`2023-${entranceMonth}`))
-      .reduce((acc, [dayKey, dayTotalTime]) => {
-        acc[dayKey] = dayTotalTime;
-        return acc;
-      }, {});
+  const timeSpentRanking = Object.entries(roomTimeData)
+    .map(([studentId, data]) => {
+      const totalTimeSpent = Object.entries(data.days)
+        .filter(([dayKey]) => dayKey.startsWith(`2023-${month}`))
+        .reduce((acc, [, dayTotalTime]) => acc + dayTotalTime, 0);
 
-    return { studentId, studentName, totalTimeSpent, month, days: monthData };
-  })
-  .sort((a, b) => b.totalTimeSpent - a.totalTimeSpent);
+      const studentName = data.studentName || "Unknown";
+      const entranceMonth = new Date(data.entranceTime).getMonth() + 1;
+
+      const monthData = Object.entries(data.days)
+        .filter(([dayKey]) => dayKey.startsWith(`2023-${entranceMonth}`))
+        .reduce((acc, [dayKey, dayTotalTime]) => {
+          acc[dayKey] = dayTotalTime;
+          return acc;
+        }, {});
+
+      return { studentId, studentName, totalTimeSpent, month, days: monthData };
+    })
+    .sort((a, b) => b.totalTimeSpent - a.totalTimeSpent);
 
   let rankingData;
-  if(timeUnit=='日数'){
-    rankingData = ranking
+  if (timeUnit == "日数") {
+    rankingData = ranking;
   } else {
-    rankingData = timeSpentRanking
+    rankingData = timeSpentRanking;
   }
-
 
   return (
     <Grid container spacing={2}>
@@ -168,7 +166,7 @@ const timeSpentRanking = Object.entries(roomTimeData)
 
         <Grid item xs={12}>
           <Card variant="outlined" style={{ height: "70vh" }}>
-            <Rank data={rankingData} timeUnit={timeUnit}/>
+            <Rank data={rankingData} timeUnit={timeUnit} />
           </Card>
         </Grid>
       </Grid>
