@@ -21,8 +21,7 @@ model Access {
   user      User     @relation(fields: [user_id], references: [id])
   user_id   String
   check_in  DateTime
-  check_out DateTime
-
+  check_out DateTime?
   @@id([user_id, check_in])
 }
 
