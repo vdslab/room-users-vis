@@ -1,5 +1,5 @@
 "use client";
-import { Calender } from "@/components/charts/Calender";
+import { Calendar } from "@/components/charts/Calendar";
 import { Text } from "@/components/common/Text";
 import { ToggleGroup } from "@/app/monthly/ToggleGroup";
 import { Card, Grid, Typography } from "@mui/material";
@@ -141,13 +141,13 @@ export default function MonthlyPage() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={7}>
-        <Calender
+        <Calendar
           options={yearOptions}
           setValue={setYear}
           value={year}
           label="年"
         />
-        <Calender
+        <Calendar
           options={monthOptions}
           setValue={setMonth}
           value={month}
