@@ -14,6 +14,12 @@ dependencies:
   "@emotion/styled":
     specifier: ^11.11.0
     version: 11.11.0(@emotion/react@11.11.3)(react@18.2.0)
+  "@fullcalendar/core":
+    specifier: ^6.1.10
+    version: 6.1.10
+  "@fullcalendar/daygrid":
+    specifier: ^6.1.10
+    version: 6.1.10(@fullcalendar/core@6.1.10)
   "@mui/icons-material":
     specifier: ^5.15.1
     version: 5.15.4(@mui/material@5.15.4)(react@18.2.0)
@@ -1965,6 +1971,26 @@ packages:
       {
         integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==,
       }
+    dev: false
+
+  /@fullcalendar/core@6.1.10:
+    resolution:
+      {
+        integrity: sha512-oTXGJSAGpCf1oY+CKp5qYjMHkJCPBkJ3SHitl63n8Q6xKeiwQ4EF6Au451euUovREwJpLmD1AyZrCnWmtB9AVg==,
+      }
+    dependencies:
+      preact: 10.12.1
+    dev: false
+
+  /@fullcalendar/daygrid@6.1.10(@fullcalendar/core@6.1.10):
+    resolution:
+      {
+        integrity: sha512-Z4GRm1IyHKgxXFTWGcEI0nTsvYOIkpE0aMt3/o3ER2SZkF+hfwcDFhtj0c9+WhMjXFIWYeoTnA9rUOY7Zl/nxA==,
+      }
+    peerDependencies:
+      "@fullcalendar/core": ~6.1.10
+    dependencies:
+      "@fullcalendar/core": 6.1.10
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:
@@ -6000,6 +6026,13 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true
+
+  /preact@10.12.1:
+    resolution:
+      {
+        integrity: sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==,
+      }
+    dev: false
 
   /prelude-ls@1.2.1:
     resolution:
