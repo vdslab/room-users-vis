@@ -3,7 +3,10 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(request, context: { params }) {
+export async function GET(
+  request: Request,
+  context: { params: { id: string } },
+) {
   const { id } = context.params;
   // Check if user exists
   const user = await prisma.user.findUnique({
