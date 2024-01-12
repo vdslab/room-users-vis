@@ -39,7 +39,7 @@ export async function POST(request: Request) {
   }
 
   // If any of the fields are empty, return error
-  if (!id || !name || !icon) {
+  if (!id || !name) {
     return NextResponse.json(
       { message: "error. missing fields" },
       { status: 400 },
@@ -57,6 +57,6 @@ export async function POST(request: Request) {
     },
   });
 
-  // Return success
-  return NextResponse.json({ message: "success" }, { status: 200 });
+  // Return Success!
+  return NextResponse.json({ message: "Success!" }, { status: 200 });
 }
