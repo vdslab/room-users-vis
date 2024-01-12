@@ -1,7 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+import { getStudentID } from "@/utils/StudentID";
+
 const prisma = new PrismaClient();
+
+const ERROR_MESSAGES = {
+  INVALID_JSON: "error. invalid JSON",
+  MISSING_BODY: "error. missing body",
+  MISSING_FIELDS: "error. missing fields",
+  INVALID_FORMAT: "error. invalid format.",
+};
 
 export async function POST(request: Request) {
   let json;
@@ -9,22 +18,26 @@ export async function POST(request: Request) {
     json = await request.json();
   } catch (error) {
     return NextResponse.json(
-      { message: "error. invalid JSON" },
+      { message: ERROR_MESSAGES.INVALID_JSON },
       { status: 400 },
     );
   }
 
   if (!json) {
     return NextResponse.json(
-      { message: "error. missing body" },
+      { message: ERROR_MESSAGES.MISSING_BODY },
       { status: 400 },
     );
   }
 
-  const { input } = json;
+  const {
+    input,
+    check_in,
+    check_out,
+  }: { input: string; check_in: string; check_out: string } = json;
   if (!input) {
     return NextResponse.json(
-      { message: "error. missing fields" },
+      { message: ERROR_MESSAGES.MISSING_FIELDS },
       { status: 400 },
     );
   }
@@ -32,10 +45,44 @@ export async function POST(request: Request) {
   const user_id = getStudentID(input);
   if (!user_id) {
     return NextResponse.json(
-      { message: "error. invalid studentID" },
+      { message: ERROR_MESSAGES.INVALID_FORMAT },
       { status: 400 },
     );
   }
+
+  const warnings = [];
+
+  // if user does not exist
+  const user = await prisma.user.findUnique({
+    where: {
+      id: user_id,
+    },
+  });
+
+  // If user does not exist, create user
+  if (!user) {
+    await prisma.user.create({
+      data: {
+        id: user_id,
+      },
+    });
+    warnings.push(
+      "Your account did not exist. Account has been created. Please register your name.",
+    );
+  } else {
+    // If user exists, check if user has name
+    if (!user.name) {
+      warnings.push(
+        "Your name is not yet registered in your account. Please register your name.",
+      );
+    }
+    if (!user.icon) {
+      warnings.push(
+        "Your icon is not yet registered in your account. Please register your icon URL.",
+      );
+    }
+  }
+
   // check if user Checked in
   const accessed = await prisma.access.findFirst({
     where: {
@@ -44,9 +91,7 @@ export async function POST(request: Request) {
     },
   });
 
-  // if user checked in
-  // update accessed check_out
-  let message = "Success!";
+  // If the user has already checked in, check out.
   if (accessed) {
     // If the check-in is not today, delete the column.
     if (accessed.check_in.getDate() == new Date().getDate()) {
@@ -61,7 +106,11 @@ export async function POST(request: Request) {
           check_out: new Date(),
         },
       });
-      return NextResponse.json({ message: "Success!" }, { status: 200 });
+
+      // Create message
+      const message = createMessage(warnings);
+
+      return NextResponse.json({ message }, { status: 200 });
     } else {
       // If the check-in is not today, set the check-out for that record to 10 minutes after the check-in.
       await prisma.access.update({
@@ -75,7 +124,9 @@ export async function POST(request: Request) {
           check_out: new Date(accessed.check_in.getTime() + 10 * 60000),
         },
       });
-      message = "Success! But you forgot to check out yesterday.";
+      warnings.push(
+        "You forgot to check out before yesterday. The record was automatically checked out.",
+      );
     }
   }
   const access = await prisma.access.create({
@@ -86,79 +137,39 @@ export async function POST(request: Request) {
     },
   });
 
-  // Return Success!
+  // Create message
+  const message = createMessage(warnings);
   return NextResponse.json({ message }, { status: 200 });
 }
 
-function getStudentID(input: String): string {
-  const info = input.toString();
-  if (info.length == 7) return info;
-  if (info.length == 16) {
-    return uni2StudentID(info);
-  }
-  const infos = infoSplit(info);
-  return infos[1];
+export async function GET(request: Request) {
+  // Retrieves information about who is currently in the room.
+  // In other words, it acquires access information that has been checked in but not yet checked out.
+
+  const access_db = await prisma.access.findMany({
+    where: {
+      check_out: null,
+    },
+  });
+
+  // Returns check_out items excluded.
+  const access = access_db.map((item) => {
+    return {
+      user_id: item.user_id,
+      check_in: item.check_in,
+    };
+  });
+
+  // Return Success!
+  return NextResponse.json(access, { status: 200 });
 }
 
-function infoSplit(info: string): string[] {
-  const infos = info.split(/\s+/).filter((e) => e != null && e != "");
-  const dates = infos.pop()!;
-  infos.push(dates.slice(0, 8));
-  infos.push(dates.slice(8));
-
-  return infos;
-}
-
-function uni2StudentID(uni_num: string): string {
-  const uni_dept = uni_num.substring(8, 11);
-  const [course, dept] = getDept(uni_dept);
-  const year = uni_num.substring(2, 4);
-
-  if (course === "b") {
-    const unique = uni_num.substring(12, 15);
-    return dept + year + unique;
-  } else if (course === "m" || course === "d") {
-    const unique = course + uni_num.substring(13, 15);
-    return dept + year + unique;
+function createMessage(warnings: string[]) {
+  let message = "";
+  if (warnings.length > 0) {
+    message = "Warning!\n" + warnings.join("\n");
   } else {
-    return uni_num;
+    message = "Success!";
   }
-}
-
-function getDept(uni: string): [string, string] {
-  // 学部
-  const bachelor_depts: { [key: string]: string } = {
-    "501": "01", //哲学
-    "502": "02", //史学
-    "503": "03", //国文
-    "504": "04", //中文
-    "505": "05", //英文
-    "506": "06", //ドイツ文
-    "507": "07", //社会
-    "508": "08", //教育
-    "509": "09", //体育
-    "510": "10", //心理
-    "518": "11", //社会福祉
-    "511": "51", //地理
-    "512": "52", //地球
-    "513": "53", //数学
-    "514": "54", //情報
-    "515": "55", //物理
-    "516": "56", //生命
-    "517": "57", //科学
-  };
-
-  // 大学院（修士）
-  const master_depts: { [key: string]: string } = {
-    "201": "61", //地球情報数理
-    "202": "62", //相関理化学
-  };
-
-  if (uni in bachelor_depts) {
-    return ["b", bachelor_depts[uni]];
-  } else if (uni in master_depts) {
-    return ["m", master_depts[uni]];
-  } else {
-    return ["o", uni];
-  }
+  return message;
 }
