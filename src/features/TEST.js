@@ -1,1 +1,1 @@
-export const TEST_DATA =[]
+export const TEST_DATA = [];
