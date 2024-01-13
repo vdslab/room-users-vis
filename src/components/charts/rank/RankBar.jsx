@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Typography } from "@mui/material";
 
 export const RankBar = (props) => {
-  const { maxTotal, name, total, timeUnit, index } = props;
+  const { maxTotal, name, total, label, index } = props;
   console.log(props);
 
   const router = useRouter();
@@ -24,7 +24,18 @@ export const RankBar = (props) => {
         </Avatar>
       </div>
       <RectSVG max={maxTotal} total={total} />
-      <Text message={timeUnit === "日数" ? total + "日" : total + "時間"} />
+      <Typography
+        sx={{
+          fontSize: 10,
+          width: 30,
+          fontWeight: "bold",
+          textAlign: "center",
+          height: 4,
+          lineHeight: 4,
+        }}
+      >
+        {total + label}
+      </Typography>
     </div>
   );
 };

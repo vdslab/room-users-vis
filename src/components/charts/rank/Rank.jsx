@@ -33,7 +33,7 @@ export const Rank = (props) => {
               ? item.totalDays
               : Math.floor(item.totalTimeSpent / (1000 * 60 * 60))
           }
-          timeUnit={timeUnit}
+          label={timeUnit === "日数" ? "日" : "h"}
           index={index}
           key={index}
         />
