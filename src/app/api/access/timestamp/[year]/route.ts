@@ -15,6 +15,11 @@ export async function GET(
     year = new Date().getFullYear().toString();
   }
 
+  if (year === "all") {
+    const access = await prisma.access.findMany();
+    return NextResponse.json(access, { status: 200 });
+  }
+
   // The value in the year variable is used to retrieve the record of the year in the Access table of the DB.
   const access = await prisma.access.findMany({
     where: {
