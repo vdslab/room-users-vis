@@ -14,6 +14,9 @@ dependencies:
   "@emotion/styled":
     specifier: ^11.11.0
     version: 11.11.0(@emotion/react@11.11.3)(react@18.2.0)
+  "@fullcalendar/common":
+    specifier: ^5.11.5
+    version: 5.11.5
   "@fullcalendar/core":
     specifier: ^6.1.10
     version: 6.1.10
@@ -38,9 +41,15 @@ dependencies:
   "@svgr/webpack":
     specifier: ^8.1.0
     version: 8.1.0(typescript@5.3.3)
+  add:
+    specifier: ^2.0.6
+    version: 2.0.6
   next:
     specifier: 14.0.4
     version: 14.0.4(@babel/core@7.23.7)(react-dom@18.2.0)(react@18.2.0)
+  next-transpile-modules:
+    specifier: ^10.0.1
+    version: 10.0.1
   react:
     specifier: ^18
     version: 18.2.0
@@ -1979,6 +1988,15 @@ packages:
       }
     dev: false
 
+  /@fullcalendar/common@5.11.5:
+    resolution:
+      {
+        integrity: sha512-3iAYiUbHXhjSVXnYWz27Od2cslztUPsOwiwKlfGvQxBixv2Kl6a8IPwaijKFYJHXdwYmfPoEgK7rvqAGVoIYwA==,
+      }
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
   /@fullcalendar/core@6.1.10:
     resolution:
       {
@@ -2880,6 +2898,13 @@ packages:
     engines: { node: ">=0.4.0" }
     hasBin: true
     dev: true
+
+  /add@2.0.6:
+    resolution:
+      {
+        integrity: sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==,
+      }
+    dev: false
 
   /ajv@6.12.6:
     resolution:
@@ -3840,7 +3865,6 @@ packages:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.2.1
-    dev: true
 
   /entities@4.5.0:
     resolution:
@@ -5580,6 +5604,15 @@ packages:
       }
     dev: true
 
+  /next-transpile-modules@10.0.1:
+    resolution:
+      {
+        integrity: sha512-4VX/LCMofxIYAVV58UmD+kr8jQflpLWvas/BQ4Co0qWLWzVh06FoZkECkrX5eEZT6oJFqie6+kfbTA3EZCVtdQ==,
+      }
+    dependencies:
+      enhanced-resolve: 5.15.0
+    dev: false
+
   /next@14.0.4(@babel/core@7.23.7)(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
@@ -6805,7 +6838,6 @@ packages:
         integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==,
       }
     engines: { node: ">=6" }
-    dev: true
 
   /text-table@0.2.0:
     resolution:

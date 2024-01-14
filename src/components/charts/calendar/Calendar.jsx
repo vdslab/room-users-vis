@@ -5,6 +5,10 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 // FullCalendarで日付や時間が選択できるようになるプラグイン。
 import interactionPlugin from "@fullcalendar/interaction";
 
+import jaLocale from "@fullcalendar/core/locales/ja";
+
+import Typography from "@mui/material/Typography";
+
 //インポートはプラグインを後にするようにしてください。
 
 export const Calendar = () => {
@@ -33,9 +37,19 @@ export const Calendar = () => {
   return (
     <div>
       <FullCalendar
-        plugins={[dayGridPlugin]}
+        plugins={[dayGridPlugin, interactionPlugin]}
+        locale={jaLocale}
         initialView="dayGridMonth"
         events={eventExample}
+        weekends={true}
+        headerToolbar={{
+          start: "prevYear,nextYear",
+          center: "title",
+          end: "today prev, next",
+        }}
+        contentHeight={"700px"}
+
+        // eventContent={(arg: EventContentArg) => EventComponent(arg)}
       />
     </div>
   );
