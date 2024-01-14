@@ -2,7 +2,7 @@
 import { Calendar } from "@/components/charts/Calendar";
 import { Text } from "@/components/common/Text";
 import { ToggleGroup } from "@/components/layouts/ToggleGroup";
-import { Card, Grid, Typography } from "@mui/material";
+import { Card, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TEST_DATA } from "@/features/TEST";
 import { Rank } from "@/components/charts/rank/Rank";
@@ -10,33 +10,26 @@ import { ranking, timeSpentRanking } from "../../features/calcData";
 
 export default function MonthlyPage() {
   const [timeUnit, setTimeUnit] = useState("日数");
+  const [data, setData] = useState(null);
 
   const now = new Date();
-  const yearOptions = Array.from(
-    { length: now.getFullYear() - 2023 + 1 },
-    (_, i) => i + 2023,
-  );
   const [year, setYear] = useState(now.getFullYear());
-
-  const [monthOptions, setMonthOptions] = useState(
-    Array.from({ length: 12 }, (_, i) => i + 1),
-  );
-
   const [month, setMonth] = useState(now.getMonth() + 1);
 
   useEffect(() => {
-    if (year === now.getFullYear()) {
-      setMonthOptions(
-        Array.from({ length: now.getMonth() + 1 }, (_, i) => i + 1),
-      );
-      setMonth(now.getMonth() + 1);
-    } else if (year === 2023) {
-      setMonthOptions([12]);
-      setMonth(12);
-    } else {
-      setMonthOptions(Array.from({ length: 12 }, (_, i) => i + 1));
-    }
-  }, [year]);
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/access");
+        const result = await response.json();
+        setData(result.message);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(data);
 
   const toggleHandler = (event, unit) => {
     setTimeUnit(unit);

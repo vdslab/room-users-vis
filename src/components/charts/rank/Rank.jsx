@@ -2,7 +2,6 @@ import { RankBar } from "./RankBar";
 
 export const Rank = (props) => {
   const { data, timeUnit } = props;
-  console.log(props);
 
   if (data.length === 0) {
     return (

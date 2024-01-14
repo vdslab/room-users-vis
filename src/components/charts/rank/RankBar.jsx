@@ -7,7 +7,6 @@ import { Typography } from "@mui/material";
 
 export const RankBar = (props) => {
   const { maxTotal, name, total, label, index } = props;
-  console.log(props);
 
   const router = useRouter();
 

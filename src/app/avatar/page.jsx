@@ -1,6 +1,5 @@
 import { AvatarCard } from "@/components/layouts/AvatarCard";
 import { Grid } from "@mui/material";
-import { useRouter } from "next/navigation";
 
 export default function AvatarPage(props) {
   const { params, searchParams } = props;
