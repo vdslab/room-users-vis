@@ -14,6 +14,26 @@ pnpm dev
 bun dev
 ```
 
+```bash
+docker-compose up
+```
+
+```bash
+pnpm exec prisma generate
+```
+
+```bash
+pnpm exec prisma migrate dev --name init
+```
+
+GUI display of Prisma contents
+
+```bash
+pnpm exec prisma studio
+```
+
+[http://localhost:5555](http://localhost:5555)
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
