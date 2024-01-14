@@ -1,9 +1,22 @@
 import { AvatarCard } from "@/components/layouts/AvatarCard";
+import { Grid } from "@mui/material";
+import { useRouter } from "next/navigation";
 
-export default function AvatarPage() {
+export default function AvatarPage(props) {
+  const { params, searchParams } = props;
+
+  const name = searchParams.name;
+  console.log(name);
+
   return (
-    <div>
-      <AvatarCard />
-    </div>
+    <Grid container>
+      <Grid item xs={3}>
+        <AvatarCard name={name} />
+      </Grid>
+
+      <Grid item xs={3}></Grid>
+
+      <Grid item xs={6}></Grid>
+    </Grid>
   );
 }

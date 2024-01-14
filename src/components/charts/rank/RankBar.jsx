@@ -12,7 +12,7 @@ export const RankBar = (props) => {
   const router = useRouter();
 
   const onAvatarClick = () => {
-    router.push("/avatar");
+    router.push(`/avatar?name=${name}`);
   };
 
   return (
