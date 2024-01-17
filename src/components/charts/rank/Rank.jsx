@@ -3,7 +3,7 @@ import { RankBar } from "./RankBar";
 export const Rank = (props) => {
   const { data, timeUnit } = props;
 
-  if (data.length === 0) {
+  if (data === null) {
     return (
       <div>
         <p>loading</p>
@@ -18,7 +18,7 @@ export const Rank = (props) => {
   if (timeUnit === "日数") {
     maxTotal = maxData[0].totalDays;
   } else {
-    maxTotal = Math.floor(maxData[0].totalTimeSpent / (1000 * 60 * 60));
+    maxTotal = Math.floor(maxData[0].totalTime / (1000 * 60 * 60));
   }
 
   return (
@@ -30,7 +30,7 @@ export const Rank = (props) => {
           total={
             timeUnit === "日数"
               ? item.totalDays
-              : Math.floor(item.totalTimeSpent / (1000 * 60 * 60))
+              : Math.floor(item.totalTime / (1000 * 60 * 60))
           }
           label={timeUnit === "日数" ? "日" : "h"}
           index={index}

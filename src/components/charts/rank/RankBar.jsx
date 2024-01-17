@@ -17,7 +17,7 @@ export const RankBar = (props) => {
   return (
     <div className="flex m-5 space-x-2">
       <Text message={index + 1} />
-      <div onClick={onAvatarClick}>
+      <div onClick={onAvatarClick} className="cursor-pointer">
         <Avatar>
           <Typography sx={{ fontSize: 10 }}>{name}</Typography>
         </Avatar>
