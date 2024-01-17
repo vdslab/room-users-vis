@@ -112,6 +112,8 @@ export default function MonthlyPage() {
     data = timeRank;
   }
 
+  console.log(timeRank);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={7}></Grid>
@@ -126,7 +128,10 @@ export default function MonthlyPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <Card variant="outlined" style={{ height: "70vh" }}>
+          <Card
+            variant="outlined"
+            style={{ height: "70vh", overflow: "scroll" }}
+          >
             <Rank data={data} timeUnit={timeUnit} />
           </Card>
         </Grid>

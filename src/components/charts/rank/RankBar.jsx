@@ -1,5 +1,4 @@
 "use client";
-import { Text } from "@/components/common/Text";
 import Avatar from "@mui/material/Avatar";
 import { RectSVG } from "./RectSVG";
 import { useRouter } from "next/navigation";
@@ -16,7 +15,18 @@ export const RankBar = (props) => {
 
   return (
     <div className="flex m-5 space-x-2">
-      <Text message={index + 1} />
+      <Typography
+        align="center"
+        style={{
+          color: "#000000",
+          fontWeight: "bold",
+          marginTop: "10px",
+          marginBottom: "auto",
+        }}
+        width={8}
+      >
+        {index + 1}
+      </Typography>
       <div onClick={onAvatarClick} className="cursor-pointer">
         <Avatar>
           <Typography sx={{ fontSize: 10 }}>{name}</Typography>

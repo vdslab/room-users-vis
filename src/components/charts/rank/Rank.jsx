@@ -11,7 +11,7 @@ export const Rank = (props) => {
     );
   }
 
-  const limitedData = data.slice(0, 5);
+  const limitedData = data;
   const maxData = data.slice(0, 1);
 
   let maxTotal;
@@ -23,20 +23,24 @@ export const Rank = (props) => {
 
   return (
     <>
-      {limitedData.map((item, index) => (
-        <RankBar
-          maxTotal={maxTotal}
-          name={item.studentName}
-          total={
-            timeUnit === "日数"
-              ? item.totalDays
-              : Math.floor(item.totalTime / (1000 * 60 * 60))
-          }
-          label={timeUnit === "日数" ? "日" : "h"}
-          index={index}
-          key={index}
-        />
-      ))}
+      {limitedData
+        .filter((item) =>
+          timeUnit === "日数" ? item.totalDays > 0 : item.totalTime > 0,
+        )
+        .map((item, index) => (
+          <RankBar
+            maxTotal={maxTotal}
+            name={item.studentName}
+            total={
+              timeUnit === "日数"
+                ? item.totalDays
+                : Math.floor(item.totalTime / (1000 * 60 * 60))
+            }
+            label={timeUnit === "日数" ? "日" : "h"}
+            index={index}
+            key={index}
+          />
+        ))}
     </>
   );
 };

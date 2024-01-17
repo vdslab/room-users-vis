@@ -1,8 +1,28 @@
+"use client";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
+import { useEffect, useState } from "react";
 
 export const AvatarCard = (props) => {
   const { name } = props;
+
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/user/${name}`);
+        const result = await response.json();
+
+        console.log(result);
+
+        setUser(result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="bg-MIDNIGHT_BLUE w-full h-screen flex flex-col items-center justify-evenly ">
@@ -13,7 +33,7 @@ export const AvatarCard = (props) => {
         <Typography
           sx={{ fontWeight: "bold", fontSize: 35, marginTop: "auto" }}
         >
-          {name}
+          {user.name}
         </Typography>
       </div>
     </div>
