@@ -2,9 +2,8 @@
 import { Card, Grid } from "@mui/material";
 import { Text } from "../../components/common/Text";
 import { Rank } from "../../components/charts/rank/Rank";
-import { ranking } from "../../features/calcData";
-import { TEST_DATA } from "../../features/TEST";
 import { useEffect, useState } from "react";
+import { Heatmap } from "../../components/charts/heatmap/Heatmap";
 
 // 週番号を取得する関数
 const getWeekNumber = (date) => {
@@ -19,7 +18,7 @@ const getWeekNumber = (date) => {
 const calculateTotalTime = (checkIn, checkOut) => {
   const checkInTime = new Date(checkIn).getTime();
   const checkOutTime = new Date(checkOut).getTime();
-  const totalTime = checkOutTime - checkInTime; // 秒単位の滞在時間
+  const totalTime = checkOutTime - checkInTime;
 
   return totalTime;
 };
@@ -56,8 +55,38 @@ const calculateWeeklyRanking = (data) => {
   return weeklyRanking;
 };
 
+const getHourlyOccupancy = (data) => {
+  const hourlyOccupancy = {};
+
+  data.forEach((entry) => {
+    const checkInTime = new Date(entry.check_in);
+    const checkOutTime = new Date(entry.check_out);
+    const dateKey = checkInTime.toISOString().split("T")[0];
+
+    // もし指定の日付がまだオブジェクトに存在しない場合、初期化
+    if (!hourlyOccupancy[dateKey]) {
+      hourlyOccupancy[dateKey] = {};
+      for (let hour = 0; hour < 24; hour++) {
+        hourlyOccupancy[dateKey][hour] = 0;
+      }
+    }
+
+    // 部屋にいる時間を1時間ごとに分割
+    let currentTime = new Date(checkInTime);
+    while (currentTime < checkOutTime) {
+      const hour = currentTime.getHours();
+      hourlyOccupancy[dateKey][hour] += 1;
+
+      currentTime.setHours(currentTime.getHours() + 1);
+    }
+  });
+
+  return hourlyOccupancy;
+};
+
 export default function weeklyPage() {
   const [weeklyRank, setWeeklyRank] = useState(null);
+  const [hourlyOccupancy, setHourlyOccupancy] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,10 +97,12 @@ export default function weeklyPage() {
         console.log(result);
 
         const weeklyRankData = calculateWeeklyRanking(result);
+        const hourlyOccupancyData = getHourlyOccupancy(result);
 
-        console.log(weeklyRankData[50]);
+        console.log(Object.values(hourlyOccupancyData));
 
         setWeeklyRank(weeklyRankData[50]);
+        setHourlyOccupancy(Object.values(hourlyOccupancyData));
       } catch (error) {
         console.log(error);
       }
@@ -93,7 +124,9 @@ export default function weeklyPage() {
         </Grid>
       </Grid>
 
-      <Grid item xs={7}></Grid>
+      <Grid item xs={7}>
+        <Heatmap hourlyOccupancy={hourlyOccupancy} />
+      </Grid>
     </Grid>
   );
 }
