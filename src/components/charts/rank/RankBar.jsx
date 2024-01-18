@@ -3,6 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import { RectSVG } from "./RectSVG";
 import { useRouter } from "next/navigation";
 import { Typography } from "@mui/material";
+import * as d3 from "d3";
 
 export const RankBar = (props) => {
   const { maxTotal, name, total, label, index } = props;
@@ -32,7 +33,11 @@ export const RankBar = (props) => {
           <Typography sx={{ fontSize: 10 }}>{name}</Typography>
         </Avatar>
       </div>
-      <RectSVG max={maxTotal} total={total} />
+      <RectSVG
+        max={maxTotal}
+        total={total}
+        color={d3.schemeCategory10[index % 10]}
+      />
       <Typography
         sx={{
           fontSize: 10,
