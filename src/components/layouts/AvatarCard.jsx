@@ -22,7 +22,7 @@ export const AvatarCard = (props) => {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   return (
     <div className="bg-MIDNIGHT_BLUE w-full h-screen flex flex-col items-center justify-evenly ">
