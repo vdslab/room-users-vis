@@ -87,6 +87,7 @@ const getHourlyOccupancy = (data) => {
 export default function weeklyPage() {
   const [weeklyRank, setWeeklyRank] = useState(null);
   const [hourlyOccupancy, setHourlyOccupancy] = useState(null);
+  const [pickerTime, setPickerTime] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,9 +113,13 @@ export default function weeklyPage() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={7}>
-        <Heatmap hourlyOccupancy={hourlyOccupancy} />
+      <Grid container item xs={7}>
+        <Grid xs={12}>{/* picker実装 */}</Grid>
+        <Grid xs={12}>
+          <Heatmap hourlyOccupancy={hourlyOccupancy} />
+        </Grid>
       </Grid>
+
       <Grid container item xs={5}>
         <Grid item xs={12}>
           <Text message="週間滞在時間ランキング" />
