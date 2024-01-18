@@ -82,7 +82,9 @@ export default function MonthlyPage() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={7}>
-        <Calendar />
+        <div>
+          <Calendar />
+        </div>
       </Grid>
 
       <Grid container item xs={5}>

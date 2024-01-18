@@ -18,39 +18,34 @@ export const Calendar = () => {
     //startとendの日付で日を跨いだ予定を表示できる
     //背景のカラーもこの中で指定できる
     {
-      title: "温泉旅行",
-      start: new Date(),
-      end: new Date().setDate(new Date().getDate() + 5),
-      description: "友達と温泉旅行",
-      backgroundColor: "green",
-      borderColor: "green",
+      title: "5421049",
+      start: "2024-01-12",
     },
     {
       title: "期末テスト",
       start: new Date().setDate(new Date().getDate() + 5),
-      description: "2年最後の期末テスト",
-      backgroundColor: "blue",
-      borderColor: "blue",
     },
   ];
 
   return (
     <div>
-      <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
-        locale={jaLocale}
-        initialView="dayGridMonth"
-        events={eventExample}
-        weekends={true}
-        headerToolbar={{
-          start: "prevYear,nextYear",
-          center: "title",
-          end: "today prev, next",
-        }}
-        contentHeight={"700px"}
+      <div>
+        <FullCalendar
+          plugins={[dayGridPlugin, interactionPlugin]}
+          locale={jaLocale}
+          initialView="dayGridMonth"
+          events={eventExample}
+          weekends={true}
+          headerToolbar={{
+            start: "prevYear,nextYear",
+            center: "title",
+            end: "today prev, next",
+          }}
+          contentHeight={"650px"}
 
-        // eventContent={(arg: EventContentArg) => EventComponent(arg)}
-      />
+          // eventContent={(arg: EventContentArg) => EventComponent(arg)}
+        />
+      </div>
     </div>
   );
 };
