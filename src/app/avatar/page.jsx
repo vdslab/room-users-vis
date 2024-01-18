@@ -35,7 +35,7 @@ export default function AvatarPage(props) {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   return (
     <Grid container>
