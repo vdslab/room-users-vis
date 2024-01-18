@@ -112,6 +112,9 @@ export default function weeklyPage() {
 
   return (
     <Grid container spacing={2}>
+      <Grid item xs={7}>
+        <Heatmap hourlyOccupancy={hourlyOccupancy} />
+      </Grid>
       <Grid container item xs={5}>
         <Grid item xs={12}>
           <Text message="週間滞在時間ランキング" />
@@ -122,10 +125,6 @@ export default function weeklyPage() {
             <Rank data={weeklyRank} timeUnit="" />
           </Card>
         </Grid>
-      </Grid>
-
-      <Grid item xs={7}>
-        <Heatmap hourlyOccupancy={hourlyOccupancy} />
       </Grid>
     </Grid>
   );
