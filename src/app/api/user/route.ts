@@ -62,6 +62,11 @@ export async function POST(request: Request) {
   return NextResponse.json({ message: "Success!" }, { status: 200 });
 }
 
+export async function GET(request: Request) {
+  const users = await prisma.user.findMany();
+  return NextResponse.json(users, { status: 200 });
+}
+
 export async function PUT(request: Request) {
   let json;
   try {
