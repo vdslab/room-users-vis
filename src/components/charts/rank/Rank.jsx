@@ -3,10 +3,18 @@ import { RankBar } from "./RankBar";
 export const Rank = (props) => {
   const { data, timeUnit } = props;
 
-  if (data === null) {
+  if (data === null || data === undefined) {
     return (
       <div>
         <p>loading</p>
+      </div>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <div>
+        <p>no data</p>
       </div>
     );
   }
