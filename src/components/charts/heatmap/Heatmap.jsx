@@ -72,7 +72,7 @@ export const Heatmap = (props) => {
   // Color scale
   const colorScale = d3
     .scaleSequential()
-    .interpolator(d3.interpolateInferno)
+    .interpolator(d3.interpolateGreens)
     .domain([min, max]);
 
   // Build the rectangles
