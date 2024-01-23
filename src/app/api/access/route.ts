@@ -290,7 +290,6 @@ export async function POST(request: Request) {
  * @returns A JSON response containing the access information.
  */
 export async function GET(request: Request) {
-  console.log("GET");
   // Get all access records that have not been checked out.
   const access_db = await prisma.access.findMany({
     where: {

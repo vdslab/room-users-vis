@@ -26,7 +26,6 @@ export async function GET(
   // Put the date 30 days ago into the variable gte.
   const gte = new Date();
   gte.setDate(gte.getDate() - 30);
-  console.log(gte);
 
   // Retrieve the past month's data from an Access table.
   // Get the person whose user_id matches the id
