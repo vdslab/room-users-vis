@@ -83,10 +83,6 @@ async function createAccessRecord(
           check_in: new Date(check_in),
         },
       });
-    } else {
-      if (!accessed.check_out) {
-        console.log(accessed);
-      }
     }
   } else if (check_in && check_out) {
     if (check_in !== check_out) {
