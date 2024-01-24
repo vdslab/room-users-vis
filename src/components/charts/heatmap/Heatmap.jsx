@@ -1,9 +1,13 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import * as d3 from "d3";
+
+import Tooltip from "./Tooltip";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 
 const DataSet = (hourlyOccupancy) => {
+  console.log("hourlyOccupancy", hourlyOccupancy);
+
   const nCol = 24;
   const nRow = 7;
 
@@ -35,6 +39,9 @@ export const Heatmap = (props) => {
 
   const width = 800;
   const height = 300;
+
+  const [info, setInfo] = useState(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
 
   const data = DataSet(hourlyOccupancy);
 
@@ -75,11 +82,49 @@ export const Heatmap = (props) => {
     .interpolator(d3.interpolateGreens)
     .domain([min, max]);
 
+  const weekJa = {
+    "Mon.": "月曜日",
+    "Tue.": "火曜日",
+    "Wed.": "水曜日",
+    "Thu.": "木曜日",
+    "Fri.": "金曜日",
+    "Sat.": "土曜日",
+    "Sun.": "日曜日",
+  };
+
   // Build the rectangles
   const allRects = data.map((d, i) => {
+    const handleMouseOver = (event) => {
+      event.target.setAttribute("stroke", "black");
+      event.target.setAttribute("stroke-width", 2);
+
+      event.target.parentNode.appendChild(event.target);
+
+      // Tooltip
+      setPos({
+        x: event.pageX,
+        y: event.pageY,
+      });
+      setInfo({
+        title: weekJa[d.y] + " " + d.x + "時",
+        info: d.value + "人 （詳細はクリック）",
+      });
+    };
+
+    const handleMouseLeave = (event) => {
+      event.target.setAttribute("stroke", "white");
+      event.target.setAttribute("stroke-width", 1);
+
+      // Tooltip
+      setInfo(null);
+    };
+
+    const handleMouseClick = (event) => {};
+
     return (
       <rect
         key={i}
+        id={d.y + d.x}
         r={4}
         x={xScale(d.x)}
         y={yScale(d.y)}
@@ -89,6 +134,10 @@ export const Heatmap = (props) => {
         fill={colorScale(d.value)}
         rx={5}
         stroke={"white"}
+        strokeWidth={1}
+        onMouseOver={handleMouseOver}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleMouseClick}
       />
     );
   });
@@ -138,6 +187,7 @@ export const Heatmap = (props) => {
           {yLabels}
         </g>
       </svg>
+      <Tooltip pos={pos} info={info} />
     </div>
   );
 };
