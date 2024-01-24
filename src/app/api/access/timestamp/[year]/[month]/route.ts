@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+import dayjs from "dayjs";
+
 const prisma = new PrismaClient();
 
 export async function GET(
@@ -10,10 +12,7 @@ export async function GET(
   // Get year variable from URL
   let { year, month } = context.params;
 
-  // Check if year is "year" and assign current year
-  if (year === "year") {
-    year = new Date().getFullYear().toString();
-  }
+  const date = dayjs();
 
   // Check if month is a valid value
   if (
@@ -26,11 +25,6 @@ export async function GET(
     return NextResponse.json({ message: "Invalid month" }, { status: 400 });
   }
 
-  // Check if month is "month" and assign current month
-  if (month === "month") {
-    month = (new Date().getMonth() + 1).toString();
-  }
-
   if (year === "all") {
     const all_access = await prisma.access.findMany();
     if (month === "all") {
@@ -38,19 +32,30 @@ export async function GET(
     } else {
       // Filtering only those all_access check_in months that match the constant month
       const access = all_access.filter(
-        (access) => access.check_in.getMonth() + 1 === Number(month),
+        (access) => dayjs(access.check_in).month() + 1 === Number(month),
       );
 
       return NextResponse.json(access, { status: 200 });
     }
   }
 
+  // Check if year is a valid value
+  if (!(year === "year" || Number(year) <= date.year())) {
+    return NextResponse.json({ message: "Invalid year" }, { status: 400 });
+  }
+  date.set("year", Number(year));
+
+  // If month is "all", return all records of the year
   if (month === "all") {
     const access = await prisma.access.findMany({
       where: {
         check_in: {
-          gte: new Date(`${year}-01-01`),
-          lt: new Date(`${year}-12-31`),
+          gte: dayjs(year === "year" ? undefined : year)
+            .startOf("year")
+            .toDate(),
+          lt: dayjs(year === "year" ? undefined : year)
+            .endOf("year")
+            .toDate(),
         },
       },
     });

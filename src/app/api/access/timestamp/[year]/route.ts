@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+import dayjs from "dayjs";
+
 const prisma = new PrismaClient();
 
 export async function GET(
@@ -9,11 +11,6 @@ export async function GET(
 ) {
   // Get year variable from URL
   let { year } = context.params;
-
-  // Check if year is "year" and assign current year
-  if (year === "year") {
-    year = new Date().getFullYear().toString();
-  }
 
   if (year === "all") {
     const access = await prisma.access.findMany();
@@ -24,8 +21,12 @@ export async function GET(
   const access = await prisma.access.findMany({
     where: {
       check_in: {
-        gte: new Date(`${year}-01-01`),
-        lt: new Date(`${year}-12-31`),
+        gte: dayjs(year === "year" ? undefined : year)
+          .startOf("year")
+          .toDate(),
+        lt: dayjs(year === "year" ? undefined : year)
+          .endOf("year")
+          .toDate(),
       },
     },
   });
