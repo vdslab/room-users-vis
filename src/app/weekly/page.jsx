@@ -114,8 +114,10 @@ export default function weeklyPage() {
   return (
     <Grid container spacing={2}>
       <Grid container item xs={7}>
-        <Grid xs={12}>{/* picker実装 */}</Grid>
-        <Grid xs={12}>
+        <Grid item xs={12}>
+          {/* picker実装 */}
+        </Grid>
+        <Grid item xs={12}>
           <Heatmap hourlyOccupancy={hourlyOccupancy} />
         </Grid>
       </Grid>
