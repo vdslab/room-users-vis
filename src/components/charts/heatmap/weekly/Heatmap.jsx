@@ -24,6 +24,7 @@ export const Heatmap = (props) => {
 
   const [info, setInfo] = useState(null);
   const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [selected, setSelected] = useState(null);
 
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;
@@ -74,8 +75,14 @@ export const Heatmap = (props) => {
       const datetime = dayjs(day + hour);
 
       const handleMouseOver = (event) => {
-        event.target.setAttribute("stroke", "black");
-        event.target.setAttribute("stroke-width", 2);
+        if (!selected || selected.id !== event.target.id) {
+          event.target.setAttribute("stroke", "black");
+          event.target.setAttribute("stroke-width", 2);
+        }
+
+        if (selected) {
+          selected.parentNode.appendChild(selected);
+        }
 
         event.target.parentNode.appendChild(event.target);
 
@@ -91,14 +98,22 @@ export const Heatmap = (props) => {
       };
 
       const handleMouseLeave = (event) => {
-        event.target.setAttribute("stroke", "white");
-        event.target.setAttribute("stroke-width", 1);
+        if (!selected || selected.id !== event.target.id) {
+          event.target.setAttribute("stroke", "white");
+          event.target.setAttribute("stroke-width", 1);
+        }
 
         // Tooltip
         setInfo(null);
       };
 
-      const handleMouseClick = (event) => {};
+      const handleMouseClick = (event) => {
+        event.target.setAttribute("stroke", "PaleVioletRed");
+        event.target.setAttribute("stroke-width", 2);
+
+        setSelected(event.target);
+        event.target.parentNode.appendChild(event.target);
+      };
 
       return (
         <rect
