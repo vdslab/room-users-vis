@@ -3,7 +3,9 @@ import { Card, Grid } from "@mui/material";
 import { Text } from "../../components/common/Text";
 import { Rank } from "../../components/charts/rank/Rank";
 import { useEffect, useState } from "react";
-import { Heatmap } from "../../components/charts/heatmap/Heatmap";
+import { Heatmap } from "@/components/charts/heatmap/weekly/Heatmap";
+
+import dayjs from "dayjs";
 
 // 週番号を取得する関数
 const getWeekNumber = (date) => {
@@ -87,23 +89,32 @@ const getHourlyOccupancy = (data) => {
 export default function weeklyPage() {
   const [weeklyRank, setWeeklyRank] = useState(null);
   const [hourlyOccupancy, setHourlyOccupancy] = useState(null);
+  const [heatmapData, setHeatmapData] = useState(null);
   const [pickerTime, setPickerTime] = useState(null);
+
+  const today = dayjs();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/access/timestamp/2023/12`);
+        const response = await fetch(
+          // `/api/access/timestamp/${today.format("YYYY/MM")}`,
+          `/api/access/timestamp/2023/12`,
+        );
         const result = await response.json();
-
-        console.log(result);
 
         const weeklyRankData = calculateWeeklyRanking(result);
         const hourlyOccupancyData = getHourlyOccupancy(result);
 
-        console.log(Object.values(hourlyOccupancyData));
-
         setWeeklyRank(weeklyRankData[50]);
         setHourlyOccupancy(Object.values(hourlyOccupancyData));
+      } catch (error) {
+        console.log(error);
+      }
+      try {
+        const response = await fetch(`/api/access/heatmap`);
+        const result = await response.json();
+        setHeatmapData(result);
       } catch (error) {
         console.log(error);
       }
@@ -118,7 +129,7 @@ export default function weeklyPage() {
           {/* picker実装 */}
         </Grid>
         <Grid item xs={12}>
-          <Heatmap hourlyOccupancy={hourlyOccupancy} />
+          <Heatmap hourlyOccupancy={hourlyOccupancy} data={heatmapData} />
         </Grid>
       </Grid>
 

@@ -6,8 +6,6 @@ import Tooltip from "./Tooltip";
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 
 const DataSet = (hourlyOccupancy) => {
-  console.log("hourlyOccupancy", hourlyOccupancy);
-
   const nCol = 24;
   const nRow = 7;
 
