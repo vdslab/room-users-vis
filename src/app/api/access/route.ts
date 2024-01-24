@@ -191,11 +191,17 @@ export async function POST(request: Request) {
 
   const {
     input,
+    id,
     check_in,
     check_out,
     time,
-  }: { input: string; check_in: string; check_out: string; time: string } =
-    json;
+  }: {
+    input: string;
+    id: string;
+    check_in: string;
+    check_out: string;
+    time: string;
+  } = json;
 
   if (!input) {
     return NextResponse.json(
@@ -204,7 +210,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const user_id = getStudentID(input);
+  const user_id = id ? id : getStudentID(input);
   if (!user_id) {
     return NextResponse.json(
       { message: ERROR_MESSAGES.INVALID_FORMAT },
