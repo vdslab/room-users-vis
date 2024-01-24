@@ -37,6 +37,10 @@ const DataSet = (hourlyOccupancy) => {
 export const Heatmap = (props) => {
   const { hourlyOccupancy } = props;
 
+  if (!hourlyOccupancy) {
+    return null;
+  }
+
   const width = 800;
   const height = 300;
 
