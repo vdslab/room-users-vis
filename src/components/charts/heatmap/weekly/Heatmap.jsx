@@ -13,6 +13,10 @@ export const Heatmap = (props) => {
   const width = 800;
   const height = 300;
 
+  const [info, setInfo] = useState(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [selected, setSelected] = useState(null);
+
   if (!data) {
     return <div>loading</div>;
   }
@@ -21,10 +25,6 @@ export const Heatmap = (props) => {
       .sort()
       .map((d) => dayjs(d)),
   ];
-
-  const [info, setInfo] = useState(null);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [selected, setSelected] = useState(null);
 
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;
