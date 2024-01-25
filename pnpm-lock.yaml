@@ -2540,10 +2540,10 @@ packages:
     dependencies:
       "@prisma/debug": 5.8.1
 
-  /@rushstack/eslint-patch@1.7.1:
+  /@rushstack/eslint-patch@1.7.0:
     resolution:
       {
-        integrity: sha512-irBNt5094vHloql4QzY8RdeI8Tns2kGsaiJ/m6jENWx9xCz/m/F4gKQ1dAailFmpL0Id9tgWLqZbTUO4SINM/Q==,
+        integrity: sha512-Jh4t/593gxs0lJZ/z3NnasKlplXT2f+4y/LZYuaKZW5KAaiVFL/fThhs+17EbUd53jUVJ0QudYCBGbN/psvaqg==,
       }
     dev: true
 
@@ -3439,7 +3439,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.22.2
-      caniuse-lite: 1.0.30001580
+      caniuse-lite: 1.0.30001579
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -3588,8 +3588,8 @@ packages:
     engines: { node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7 }
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001580
-      electron-to-chromium: 1.4.645
+      caniuse-lite: 1.0.30001579
+      electron-to-chromium: 1.4.643
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.2)
 
@@ -3637,10 +3637,10 @@ packages:
     engines: { node: ">=10" }
     dev: false
 
-  /caniuse-lite@1.0.30001580:
+  /caniuse-lite@1.0.30001579:
     resolution:
       {
-        integrity: sha512-mtj5ur2FFPZcCEpXFy8ADXbDACuNFXg6mxVDqp7tqooX6l3zwm+d8EPoeOSIFRDvHs8qu7/SLFOGniULkcH2iA==,
+        integrity: sha512-u5AUVkixruKHJjw/pj9wISlcMpgFWzSrczLZbrqBSxukQixmg0SJ5sZTpvaFvxU0HoQKd4yoyAogyrAz9pzJnA==,
       }
 
   /chalk@2.4.2:
@@ -4003,7 +4003,7 @@ packages:
       }
     engines: { node: ">=12" }
     dependencies:
-      delaunator: 5.0.1
+      delaunator: 5.0.0
     dev: false
 
   /d3-dispatch@3.0.1:
@@ -4358,10 +4358,10 @@ packages:
       object-keys: 1.1.1
     dev: true
 
-  /delaunator@5.0.1:
+  /delaunator@5.0.0:
     resolution:
       {
-        integrity: sha512-8nvh+XBe96aCESrGOqMp/84b13H9cdKbG5P2ejQCh4d4sK9RL4371qou9drQjMhvnPmhWl5hnmqbEE0fXr9Xnw==,
+        integrity: sha512-AyLvtyJdbv/U1GkiS6gUUzclRoAY4Gs75qkMygJJhU75LW4DNuSF2RMzpxs9jw9Oz1BobHjTdkG3zdP55VxAqw==,
       }
     dependencies:
       robust-predicates: 3.0.2
@@ -4485,10 +4485,10 @@ packages:
       }
     dev: true
 
-  /electron-to-chromium@1.4.645:
+  /electron-to-chromium@1.4.643:
     resolution:
       {
-        integrity: sha512-EeS1oQDCmnYsRDRy2zTeC336a/4LZ6WKqvSaM1jLocEk5ZuyszkQtCpsqvuvaIXGOUjwtvF6LTcS8WueibXvSw==,
+        integrity: sha512-QHscvvS7gt155PtoRC0dR2ilhL8E9LHhfTQEq1uD5AL0524rBLAwpAREFH06f87/e45B9XkR6Ki5dbhbCsVEIg==,
       }
 
   /emoji-regex@10.3.0:
@@ -4678,7 +4678,7 @@ packages:
         optional: true
     dependencies:
       "@next/eslint-plugin-next": 14.0.4
-      "@rushstack/eslint-patch": 1.7.1
+      "@rushstack/eslint-patch": 1.7.0
       "@typescript-eslint/parser": 6.19.1(eslint@8.56.0)(typescript@5.3.3)
       eslint: 8.56.0
       eslint-import-resolver-node: 0.3.9
@@ -6300,7 +6300,7 @@ packages:
       "@next/env": 14.0.4
       "@swc/helpers": 0.5.2
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001580
+      caniuse-lite: 1.0.30001579
       graceful-fs: 4.2.11
       postcss: 8.4.31
       react: 18.2.0
