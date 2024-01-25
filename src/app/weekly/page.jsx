@@ -86,7 +86,7 @@ const getHourlyOccupancy = (data) => {
   return hourlyOccupancy;
 };
 
-export default function weeklyPage() {
+export default function WeeklyPage() {
   const [weeklyRank, setWeeklyRank] = useState(null);
   const [hourlyOccupancy, setHourlyOccupancy] = useState(null);
   const [heatmapData, setHeatmapData] = useState(null);
