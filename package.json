@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && prisma migrate deploy",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -11,7 +11,7 @@
     "prepare": "husky install",
     "generate": "prisma generate",
     "migrate": "prisma migrate dev --name init",
-    "migrate:production": "prisma migrate deploy"
+    "migrate:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
