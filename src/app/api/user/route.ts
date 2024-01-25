@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   }
 
   const colorScale = d3.scaleOrdinal(d3.schemeSet3);
-  const randomColor = colorScale(Math.random());
+  const randomColor = colorScale(String(Math.random()));
 
   // If user does not exist, create user
 
