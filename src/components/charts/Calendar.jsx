@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-export function Calender(props) {
+export default function Calendar(props) {
   const options = props.options;
 
   const setValue = props.setValue;

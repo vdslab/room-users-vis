@@ -2,11 +2,10 @@
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import CheckIcon from "@mui/icons-material/Check";
-import { Text } from "../../components/common/Text";
+import { Text } from "../common/Text";
 
 export const ToggleGroup = (props) => {
   const { toggleHandler, timeUnit } = props;
-
 
   return (
     <ToggleButtonGroup value={timeUnit} onChange={toggleHandler} exclusive>

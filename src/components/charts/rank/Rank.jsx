@@ -1,18 +1,54 @@
 import { RankBar } from "./RankBar";
 
 export const Rank = (props) => {
+  const { data, timeUnit } = props;
 
-  const { data } = props
-  console.log(props)
+  if (data === null || data === undefined) {
+    return (
+      <div>
+        <p>loading</p>
+      </div>
+    );
+  }
 
-  const limitedData = data.slice(0, 5);
+  if (data.length === 0) {
+    return (
+      <div>
+        <p>no data</p>
+      </div>
+    );
+  }
+
+  const limitedData = data;
   const maxData = data.slice(0, 1);
+
+  let maxTotal;
+  if (timeUnit === "日数") {
+    maxTotal = maxData[0].totalDays;
+  } else {
+    maxTotal = Math.floor(maxData[0].totalTime / (1000 * 60 * 60));
+  }
 
   return (
     <>
-      {limitedData.map((item, index) =>
-        <RankBar maxTotal={maxData[0].totalDays} data={item} index={index} key={index}/>
-      )}
+      {limitedData
+        .filter((item) =>
+          timeUnit === "日数" ? item.totalDays > 0 : item.totalTime > 0,
+        )
+        .map((item, index) => (
+          <RankBar
+            maxTotal={maxTotal}
+            name={item.studentName}
+            total={
+              timeUnit === "日数"
+                ? item.totalDays
+                : (item.totalTime / (1000 * 60 * 60)).toFixed(2)
+            }
+            label={timeUnit === "日数" ? "日" : "h"}
+            index={index}
+            key={index}
+          />
+        ))}
     </>
   );
 };

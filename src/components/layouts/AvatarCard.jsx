@@ -1,12 +1,41 @@
-import { Avatar, Typography } from "@mui/material"
+"use client";
+import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import { useEffect, useState } from "react";
 
+export const AvatarCard = (props) => {
+  const { id } = props;
 
-export const AvatarCard = () => {
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/user/${id}`);
+        const result = await response.json();
+
+        console.log(result);
+
+        setUser(result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [id]);
+
   return (
-    <div style={{ width:'30vw', height:'100vh', backgroundColor:"midnightblue" }}>
-      <Avatar />
-      <Typography>山田たろう</Typography>
-      <Typography>3年</Typography>
+    <div className="bg-MIDNIGHT_BLUE w-full h-screen flex flex-col items-center justify-evenly ">
+      <Avatar sx={{ width: 200, height: 200 }}>
+        <Typography>{id}</Typography>
+      </Avatar>
+      <div className="bg-BAHAMA_BLUE w-4/5 h-1/6 rounded text-center">
+        <Typography
+          sx={{ fontWeight: "bold", fontSize: 35, marginTop: "auto" }}
+        >
+          {user.name}
+        </Typography>
+      </div>
     </div>
-  )
-}
+  );
+};

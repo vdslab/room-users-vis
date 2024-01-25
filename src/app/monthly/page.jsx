@@ -1,100 +1,122 @@
 "use client";
-import { Calender } from "@/components/charts/Calender";
+import { Calendar } from "@/components/charts/Calendar";
 import { Text } from "@/components/common/Text";
-import { ToggleGroup } from "@/app/monthly/ToggleGroup";
-import { Card, Grid, Typography } from "@mui/material";
+import { ToggleGroup } from "@/components/layouts/ToggleGroup";
+import { Card, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import { TEST_DATA } from "@/features/TEST";
 import { Rank } from "@/components/charts/rank/Rank";
+
+// データを受け取り、ユーザーごとの入室日順のランキングデータを作成する関数
+const createDayRankingData = (data) => {
+  // ユーザーごとの入室日のセットを格納するオブジェクト
+  const userDates = {};
+
+  // データからユーザーごとの入室日をセットに格納
+  data.forEach(({ user_id, check_in }) => {
+    const dateKey = new Date(check_in).toISOString().split("T")[0];
+
+    if (!userDates[user_id]) {
+      userDates[user_id] = new Set();
+    }
+
+    userDates[user_id].add(dateKey);
+  });
+
+  // ランキングデータを作成
+  const rankingData = Object.keys(userDates).map((userId) => {
+    const totalDays = userDates[userId].size;
+
+    return {
+      studentId: userId,
+      studentName: userId,
+      totalDays: totalDays,
+    };
+  });
+
+  // 日数の降順でソート
+  rankingData.sort((a, b) => b.totalDays - a.totalDays);
+
+  return rankingData;
+};
+
+// データを受け取り、ユーザーごとの入室時間のランキングデータを作成する関数
+const createTimeRankingData = (data) => {
+  // ユーザーごとの入室時間の合計を格納するオブジェクト
+  const userTotalTimes = {};
+
+  // データからユーザーごとの入室時間を合計
+  data.forEach(({ user_id, check_in, check_out }) => {
+    const checkInTime = new Date(check_in).getTime();
+    const checkOutTime = new Date(check_out).getTime();
+    const totalTime = checkOutTime - checkInTime;
+
+    if (!userTotalTimes[user_id]) {
+      userTotalTimes[user_id] = 0;
+    }
+
+    userTotalTimes[user_id] += totalTime;
+  });
+
+  // ランキングデータを作成
+  const rankingData = Object.keys(userTotalTimes).map((userId) => {
+    return {
+      studentId: userId,
+      studentName: userId,
+      totalTime: userTotalTimes[userId],
+    };
+  });
+
+  // 時間の降順でソート
+  rankingData.sort((a, b) => b.totalTime - a.totalTime);
+
+  return rankingData;
+};
 
 export default function MonthlyPage() {
   const [timeUnit, setTimeUnit] = useState("日数");
+  const [dayRank, setDayRank] = useState(null);
+  const [timeRank, setTimeRank] = useState(null);
 
   const now = new Date();
-  const yearOptions = Array.from(
-    { length: now.getFullYear() - 2023 + 1 },
-    (_, i) => i + 2023,
-  );
   const [year, setYear] = useState(now.getFullYear());
-
-  const [monthOptions, setMonthOptions] = useState(
-    Array.from({ length: 12 }, (_, i) => i + 1),
-  );
-
   const [month, setMonth] = useState(now.getMonth() + 1);
 
   useEffect(() => {
-    if (year === now.getFullYear()) {
-      setMonthOptions(
-        Array.from({ length: now.getMonth() + 1 }, (_, i) => i + 1),
-      );
-      setMonth(now.getMonth() + 1);
-    } else if (year === 2023) {
-      setMonthOptions([12]);
-      setMonth(12);
-    } else {
-      setMonthOptions(Array.from({ length: 12 }, (_, i) => i + 1));
-    }
-  }, [year]);
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/access/timestamp/${year - 1}/12`);
+        const result = await response.json();
+
+        const rankingDayData = createDayRankingData(result);
+        const rankingTimeData = createTimeRankingData(result);
+
+        console.log(rankingTimeData);
+
+        setDayRank(rankingDayData);
+        setTimeRank(rankingTimeData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const toggleHandler = (event, unit) => {
     setTimeUnit(unit);
   };
 
-  const data = filterByYearMonth(TEST_DATA, year, month);
-
-  const entranceCounts = {};
-
-  for (const entry of data) {
-    const studentId = entry["学籍番号"];
-    const entryTime = new Date(entry["日時"]);
-
-    if (entryTime) {
-      const monthKey = entryTime.toISOString().slice(0, 7);
-      if (!entranceCounts[studentId]) {
-        entranceCounts[studentId] = {};
-      }
-      if (!entranceCounts[studentId][monthKey]) {
-        entranceCounts[studentId][monthKey] = new Set();
-      }
-      entranceCounts[studentId][monthKey].add(
-        entryTime.toISOString().slice(8, 10),
-      );
-    }
+  let data;
+  if (timeUnit == "日数") {
+    data = dayRank;
+  } else {
+    data = timeRank;
   }
 
-  const studentLookup = Object.fromEntries(
-    data.map((student) => [student["学籍番号"], student["氏名"]]),
-  );
-
-  const ranking = Object.entries(entranceCounts)
-    .map(([studentId, entranceCounts]) => {
-      const totalDays = Object.values(entranceCounts).reduce(
-        (acc, daySet) => acc + daySet.size,
-        0,
-      );
-
-      const studentName = studentLookup[studentId] || "Unknown";
-      return { studentId, studentName, totalDays };
-    })
-    .sort((a, b) => b.totalDays - a.totalDays);
+  console.log(timeRank);
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={7}>
-        <Calender
-          options={yearOptions}
-          setValue={setYear}
-          value={year}
-          label="年"
-        />
-        <Calender
-          options={monthOptions}
-          setValue={setMonth}
-          value={month}
-          label="月"
-        />
-      </Grid>
+      <Grid item xs={7}></Grid>
 
       <Grid container item xs={5}>
         <Grid item xs={12}>
@@ -106,21 +128,14 @@ export default function MonthlyPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <Card variant="outlined" style={{ height: "70vh" }}>
-            <Rank data={ranking} />
+          <Card
+            variant="outlined"
+            style={{ height: "70vh", overflow: "scroll" }}
+          >
+            <Rank data={data} timeUnit={timeUnit} />
           </Card>
         </Grid>
       </Grid>
     </Grid>
   );
-}
-
-// TEST_DATAから、年月のフィルターをかける
-function filterByYearMonth(data, year, month) {
-  return data.filter((entry) => {
-    const entryTime = new Date(entry["日時"]);
-    return (
-      entryTime.getFullYear() === year && entryTime.getMonth() + 1 === month
-    );
-  });
 }
