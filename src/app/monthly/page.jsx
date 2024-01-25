@@ -99,7 +99,7 @@ export default function MonthlyPage() {
       }
     };
     fetchData();
-  }, []);
+  }, [year, month]);
 
   const toggleHandler = (event, unit) => {
     setTimeUnit(unit);
