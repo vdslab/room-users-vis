@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { id, name, icon } = json;
+  const { id, name, icon, color } = json;
 
   // Check if user exists
   const user = await prisma.user.findUnique({
@@ -55,6 +55,7 @@ export async function POST(request: Request) {
       id,
       name,
       icon,
+      color,
     },
   });
 
@@ -85,7 +86,7 @@ export async function PUT(request: Request) {
     );
   }
 
-  const { id, name, icon } = json;
+  const { id, name, icon, color } = json;
 
   // If any of the fields are empty, return error
   if (!id) {
@@ -111,7 +112,7 @@ export async function PUT(request: Request) {
   }
 
   // If any of the fields are empty, return error
-  if (!name && !icon) {
+  if (!name && !icon && !color) {
     return NextResponse.json(
       { message: "error. missing fields" },
       { status: 400 },
@@ -128,6 +129,7 @@ export async function PUT(request: Request) {
     data: {
       name: name || user.name,
       icon: icon || user.icon,
+      color: color || user.color,
     },
   });
 
