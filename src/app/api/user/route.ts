@@ -2,6 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import exp from "constants";
 import { NextResponse } from "next/server";
 
+import * as d3 from "d3";
+
 const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
@@ -47,6 +49,9 @@ export async function POST(request: Request) {
     );
   }
 
+  const colorScale = d3.scaleOrdinal(d3.schemeSet3);
+  const randomColor = colorScale(Math.random());
+
   // If user does not exist, create user
 
   // Create user
@@ -55,7 +60,7 @@ export async function POST(request: Request) {
       id,
       name,
       icon,
-      color,
+      color: color || randomColor,
     },
   });
 
