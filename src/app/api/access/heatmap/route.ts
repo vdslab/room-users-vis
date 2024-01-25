@@ -36,17 +36,17 @@ export async function GET(request: Request) {
   const heatmap: Record<string, Record<string, string[]>> = {};
 
   let date = today.subtract(6, "day");
-  // while (date.isBefore(today.add(1, "day"))) {
-  //   const dateStr = date.format("YYYY-MM-DD");
-  //   heatmap[dateStr] = {};
-  //   let hour = 0;
-  //   while (hour < 24) {
-  //     const hourStr = hour.toString().padStart(2, "0") + ":00";
-  //     heatmap[dateStr][hourStr] = [];
-  //     hour++;
-  //   }
-  //   date = date.add(1, "day");
-  // }
+  while (date.isBefore(today.add(1, "day"))) {
+    const dateStr = date.format("YYYY-MM-DD");
+    heatmap[dateStr] = {};
+    let hour = 0;
+    while (hour < 24) {
+      const hourStr = hour.toString().padStart(2, "0") + ":00";
+      heatmap[dateStr][hourStr] = [];
+      hour++;
+    }
+    date = date.add(1, "day");
+  }
 
   for (const access of accesses) {
     const id = access.user_id;
