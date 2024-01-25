@@ -111,6 +111,17 @@ export const Heatmap = (props) => {
         event.target.setAttribute("stroke", "PaleVioletRed");
         event.target.setAttribute("stroke-width", 2);
 
+        if (selected) {
+          if (selected.id !== event.target.id) {
+            selected.setAttribute("stroke", "white");
+            selected.setAttribute("stroke-width", 1);
+          } else {
+            event.target.setAttribute("stroke", "black");
+            setSelected(null);
+            return;
+          }
+        }
+
         setSelected(event.target);
         event.target.parentNode.appendChild(event.target);
       };

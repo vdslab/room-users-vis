@@ -12,6 +12,7 @@ function Tooltip(props) {
     left: pos.x + 15,
     top: pos.y + 15,
     zIndex: 7, // Set z-index to 7
+    userSelect: "none", // Disable text selection
   };
 
   return (
