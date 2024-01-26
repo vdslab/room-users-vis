@@ -1,4 +1,3 @@
-import { useMemo, useState } from "react";
 import * as d3 from "d3";
 import { HeatmapLegend } from "./HeatmapLegend";
 
@@ -59,25 +58,21 @@ export const AvatarHeatmap = (props) => {
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
 
   // groups
-  const allYGroups = useMemo(() => [...new Set(data.map((d) => d.y))], [data]);
-  const allXGroups = useMemo(() => [...new Set(data.map((d) => d.x))], [data]);
+  const allYGroups = [...new Set(data.map((d) => d.y))];
+  const allXGroups = [...new Set(data.map((d) => d.x))];
 
   // x and y scales
-  const xScale = useMemo(() => {
-    return d3
-      .scaleBand()
-      .range([0, boundsWidth])
-      .domain(allXGroups)
-      .padding(0.01);
-  }, [allXGroups, boundsWidth]); // Remove 'data' and 'width' from the dependency array
+  const xScale = d3
+    .scaleBand()
+    .range([0, boundsWidth])
+    .domain(allXGroups)
+    .padding(0.01);
 
-  const yScale = useMemo(() => {
-    return d3
-      .scaleBand()
-      .range([boundsHeight, 0])
-      .domain(allYGroups.reverse())
-      .padding(0.01);
-  }, [allYGroups, boundsHeight]);
+  const yScale = d3
+    .scaleBand()
+    .range([boundsHeight, 0])
+    .domain(allYGroups.reverse())
+    .padding(0.01);
 
   const [min, max] = d3.extent(data.map((d) => d.value));
 
