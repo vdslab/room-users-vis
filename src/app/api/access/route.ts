@@ -122,8 +122,8 @@ async function createAccessRecord(
       return;
     }
 
-    const check_in_date = dayjs(accessed.check_in);
-    const check_out_date = dayjs(check_out);
+    const check_in_date = dayjs(accessed.check_in).tz();
+    const check_out_date = dayjs(check_out).tz();
 
     if (check_in_date.isSame(check_out_date, "day")) {
       if (Math.abs(check_in_date.diff(check_out_date, "minute")) > 10) {

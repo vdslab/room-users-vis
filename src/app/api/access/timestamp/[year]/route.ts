@@ -27,6 +27,7 @@ export async function GET(
     where: {
       check_in: {
         gte: dayjs(year === "year" ? undefined : year)
+          .tz()
           .startOf("year")
           .toDate(),
         lt: dayjs(year === "year" ? undefined : year)
