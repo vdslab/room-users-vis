@@ -35,16 +35,13 @@ const DataSet = (hourlyOccupancy) => {
 export const Heatmap = (props) => {
   const { hourlyOccupancy } = props;
 
-  if (!hourlyOccupancy) {
-    return null;
-  }
-
   const width = 800;
   const height = 300;
 
-  const data = DataSet(hourlyOccupancy);
+  const [info, setInfo] = useState(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
 
-  console.log(data);
+  const data = DataSet(hourlyOccupancy);
 
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;
@@ -80,11 +77,48 @@ export const Heatmap = (props) => {
   // Color scale
   const colorScale = d3
     .scaleSequential()
-    .interpolator(d3.interpolateBlues)
+    .interpolator(d3.interpolateGreens)
     .domain([min, max]);
+
+  const weekJa = {
+    "Mon.": "月曜日",
+    "Tue.": "火曜日",
+    "Wed.": "水曜日",
+    "Thu.": "木曜日",
+    "Fri.": "金曜日",
+    "Sat.": "土曜日",
+    "Sun.": "日曜日",
+  };
 
   // Build the rectangles
   const allRects = data.map((d, i) => {
+    const handleMouseOver = (event) => {
+      event.target.setAttribute("stroke", "black");
+      event.target.setAttribute("stroke-width", 2);
+
+      event.target.parentNode.appendChild(event.target);
+
+      // Tooltip
+      setPos({
+        x: event.pageX,
+        y: event.pageY,
+      });
+      setInfo({
+        title: weekJa[d.y] + " " + d.x + "時",
+        info: d.value + "人 （詳細はクリック）",
+      });
+    };
+
+    const handleMouseLeave = (event) => {
+      event.target.setAttribute("stroke", "white");
+      event.target.setAttribute("stroke-width", 1);
+
+      // Tooltip
+      setInfo(null);
+    };
+
+    const handleMouseClick = (event) => {};
+
     return (
       <rect
         key={i}
@@ -98,6 +132,10 @@ export const Heatmap = (props) => {
         fill={colorScale(d.value)}
         rx={5}
         stroke={"white"}
+        strokeWidth={1}
+        onMouseOver={handleMouseOver}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleMouseClick}
       />
     );
   });
