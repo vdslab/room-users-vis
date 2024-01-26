@@ -2,20 +2,13 @@ import { useMemo, useState } from "react";
 import * as d3 from "d3";
 
 import Tooltip from "./Tooltip";
-
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault("Asia/Tokyo");
+import ja from "dayjs/locale/ja";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 
 export const Heatmap = (props) => {
   const { data } = props;
-
-  console.log(data);
 
   const width = 800;
   const height = 300;
@@ -30,7 +23,7 @@ export const Heatmap = (props) => {
   const days = [
     ...Object.keys(data)
       .sort()
-      .map((d) => dayjs(d).tz()),
+      .map((d) => dayjs(d)),
   ];
 
   // bounds = area inside the axis
@@ -79,7 +72,7 @@ export const Heatmap = (props) => {
   // Build the rectangles
   const allRects = Object.entries(data).map(([day, h_data], i) => {
     return Object.entries(h_data).map(([hour, d], i) => {
-      const datetime = dayjs(day + hour).tz();
+      const datetime = dayjs(day + hour);
 
       const handleMouseOver = (event) => {
         if (!selected || selected.id !== event.target.id) {
@@ -99,8 +92,8 @@ export const Heatmap = (props) => {
           y: event.pageY,
         });
         setInfo({
-          title: datetime.locale(ja).format("YYYY/MM/DD（ddd）HH時"),
-          info: d.length + "人 （詳細はクリック）",
+          title: d.length + "人",
+          info: datetime.locale(ja).format("YYYY/MM/DD（ddd）HH時"),
         });
       };
 
@@ -139,7 +132,7 @@ export const Heatmap = (props) => {
           id={datetime.format("YYYY-MM-DD-HH-mm")}
           r={4}
           x={xScale(datetime.format("H"))}
-          y={yScale(dayjs(day).tz().format("ddd") + ".")}
+          y={yScale(dayjs(day).format("ddd") + ".")}
           width={xScale.bandwidth()}
           height={yScale.bandwidth()}
           fill={colorScale(d.length)}
