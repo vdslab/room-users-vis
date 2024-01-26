@@ -93,7 +93,12 @@ export const Heatmap = (props) => {
         });
         setInfo({
           title: d.length + "人",
-          info: datetime.locale(ja).format("YYYY/MM/DD（ddd）HH時"),
+          info: (
+            <>
+              {datetime.locale(ja).format("YYYY/MM/DD（ddd）HH時")} <br />
+              {d.map((e) => e).join(", ")}
+            </>
+          ),
         });
       };
 
