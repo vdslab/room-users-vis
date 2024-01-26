@@ -12,7 +12,6 @@ export const Text = (props) => {
           fontWeight: "bold",
           marginTop: "10px",
           marginBottom: "auto",
-          margin: "30px",
         }}
       >
         {message}

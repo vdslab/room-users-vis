@@ -10,8 +10,6 @@ const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 export const Heatmap = (props) => {
   const { data } = props;
 
-  console.log(data);
-
   const width = 800;
   const height = 300;
 
