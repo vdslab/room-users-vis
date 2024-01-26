@@ -69,7 +69,7 @@ export const RankBar = (props) => {
           </Avatar>
         )}
       </div>
-      <RectSVG max={maxTotal} total={total} color={userColor} />
+      <RectSVG max={maxTotal} total={total} color={userColor} marginW={120} />
       <Typography
         sx={{
           fontSize: 10,
