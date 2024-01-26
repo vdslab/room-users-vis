@@ -5,6 +5,8 @@ import { Rank } from "../../components/charts/rank/Rank";
 import { useEffect, useState } from "react";
 import { Heatmap } from "@/components/charts/heatmap/weekly/Heatmap";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import dayjs from "dayjs";
 
@@ -123,13 +125,28 @@ export default function WeeklyPage() {
     fetchData();
   }, []);
 
+  const onPickerChange = (newDate) => {
+    setPickerTime(newDate);
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid container item xs={7}>
         <Grid item xs={12}>
-          <DatePicker label="Basic date picker" />
+          <div className="flex justify-center items-center h-full">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="DatePicker"
+                value={pickerTime}
+                onChange={onPickerChange}
+                format="YYYY/MM/DD"
+                mask="____/__/__"
+              />
+            </LocalizationProvider>
+          </div>
         </Grid>
         <Grid item xs={12}>
+          <Text message="時間帯別滞在人数" />
           <Heatmap hourlyOccupancy={hourlyOccupancy} data={heatmapData} />
         </Grid>
       </Grid>
