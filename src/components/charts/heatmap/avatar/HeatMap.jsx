@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { HeatmapLegend } from "./HeatmapLegend";
+import { HeatmapLegend } from "../HeatMapLegend";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 
