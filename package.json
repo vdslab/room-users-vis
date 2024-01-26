@@ -20,6 +20,7 @@
     "@mui/icons-material": "^5.15.6",
     "@mui/material": "^5.15.6",
     "@mui/material-nextjs": "^5.15.6",
+    "prisma": "^5.8.1",
     "@prisma/client": "^5.8.1",
     "@svgr/webpack": "^8.1.0",
     "@types/d3": "^7.4.3",
@@ -39,7 +40,6 @@
     "lint-staged": "^15.2.0",
     "postcss": "^8.4.33",
     "prettier": "3.1.1",
-    "prisma": "^5.8.1",
     "tailwindcss": "^3.4.1"
   },
   "lint-staged": {
