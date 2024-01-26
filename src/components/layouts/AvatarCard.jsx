@@ -14,8 +14,6 @@ export const AvatarCard = (props) => {
         const response = await fetch(`/api/user/${id}`);
         const result = await response.json();
 
-        console.log(result);
-
         setUser(result);
       } catch (error) {
         console.log(error);
@@ -26,9 +24,13 @@ export const AvatarCard = (props) => {
 
   return (
     <div className="bg-MIDNIGHT_BLUE w-full h-screen flex flex-col items-center justify-evenly ">
-      <Avatar sx={{ width: 200, height: 200 }}>
-        <Typography>{user}</Typography>
-      </Avatar>
+      {user.icon ? (
+        <Avatar sx={{ width: 200, height: 200 }} />
+      ) : (
+        <Avatar sx={{ width: 200, height: 200 }}>
+          <Typography>{user.name}</Typography>
+        </Avatar>
+      )}
       <div className="bg-BAHAMA_BLUE w-4/5 h-1/6 rounded text-center">
         <Typography
           sx={{ fontWeight: "bold", fontSize: 35, marginTop: "auto" }}
