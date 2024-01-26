@@ -100,7 +100,7 @@ export default function WeeklyPage() {
   const [heatmapData, setHeatmapData] = useState(null);
   const [pickerTime, setPickerTime] = useState(null);
 
-  const today = dayjs().tz();
+  const today = dayjs();
 
   useEffect(() => {
     const fetchData = async () => {

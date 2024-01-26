@@ -3,6 +3,11 @@ import * as d3 from "d3";
 
 import Tooltip from "./Tooltip";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Tokyo");
 import ja from "dayjs/locale/ja";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
