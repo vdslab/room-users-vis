@@ -2,11 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault("Asia/Tokyo");
 
 const prisma = new PrismaClient();
 

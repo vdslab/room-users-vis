@@ -14,7 +14,7 @@ model User {
   id     String   @id
   name   String?
   icon   String?
-  color  String?
+  color String?
   Access Access[]
 }
 
