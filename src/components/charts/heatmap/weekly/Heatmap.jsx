@@ -3,6 +3,11 @@ import * as d3 from "d3";
 
 import Tooltip from "./Tooltip";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Tokyo");
 import ja from "dayjs/locale/ja";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
@@ -23,7 +28,7 @@ export const Heatmap = (props) => {
   const days = [
     ...Object.keys(data)
       .sort()
-      .map((d) => dayjs(d)),
+      .map((d) => dayjs(d).tz()),
   ];
 
   // bounds = area inside the axis
@@ -72,7 +77,7 @@ export const Heatmap = (props) => {
   // Build the rectangles
   const allRects = Object.entries(data).map(([day, h_data], i) => {
     return Object.entries(h_data).map(([hour, d], i) => {
-      const datetime = dayjs(day + hour);
+      const datetime = dayjs(day + hour).tz();
 
       const handleMouseOver = (event) => {
         if (!selected || selected.id !== event.target.id) {
@@ -137,7 +142,7 @@ export const Heatmap = (props) => {
           id={datetime.format("YYYY-MM-DD-HH-mm")}
           r={4}
           x={xScale(datetime.format("H"))}
-          y={yScale(dayjs(day).format("ddd") + ".")}
+          y={yScale(dayjs(day).tz().format("ddd") + ".")}
           width={xScale.bandwidth()}
           height={yScale.bandwidth()}
           fill={colorScale(d.length)}

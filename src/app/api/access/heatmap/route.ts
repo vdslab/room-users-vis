@@ -7,6 +7,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Tokyo");
 
 const prisma = new PrismaClient();
 
@@ -53,8 +54,8 @@ export async function GET(request: Request) {
     const id = access.user_id;
     const checkIn = dayjs(access.check_in).tz().startOf("hour");
     const checkOut = access.check_out
-      ? dayjs(access.check_out).tz()
-      : dayjs().tz().endOf("hour");
+      ? dayjs(access.check_out).endOf("hour").tz()
+      : dayjs().endOf("hour").tz();
     let date = checkIn;
 
     while (date.isBefore(checkOut)) {
