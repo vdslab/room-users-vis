@@ -1,50 +1,58 @@
 import { useMemo, useState } from "react";
 import * as d3 from "d3";
-
-import Tooltip from "./Tooltip";
+import { HeatmapLegend } from "./HeatmapLegend";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 
-const DataSet = (hourlyOccupancy) => {
-  const nCol = 24;
-  const nRow = 7;
+const DataSet = (avatarOccupancy) => {
+  const week = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
+  const month = [
+    "Dec",
+    "Dec-1",
+    "Dec-2",
+    "Dec-3",
+    "Dec-4",
+    "Jan",
+    "Jan-1",
+    "Jan-2",
+    "Jan-3",
+    "Jan-4",
+  ];
 
-  const week = ["Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat.", "Sun."];
-
-  const hour = [];
-  for (let i = 0; i <= 24; i++) {
-    hour.push(i);
-  }
+  const nCol = month.length;
+  const nRow = week.length;
 
   let data = [];
 
   for (let x = 0; x < nCol; x++) {
     for (let y = 0; y < nRow; y++) {
-      const value = hourlyOccupancy ? hourlyOccupancy[y][x] + 10 : 0;
+      const value = avatarOccupancy ? avatarOccupancy[x][y] + 10 : 10;
       data.push({
-        x: hour[x],
+        x: month[x],
         y: week[y],
         value: value,
       });
     }
   }
 
+  console.log(data);
+
   return data;
 };
 
-export const Heatmap = (props) => {
-  const { hourlyOccupancy } = props;
+export const AvatarHeatmap = (props) => {
+  const { avatarOccupancy } = props;
 
-  if (!hourlyOccupancy) {
+  console.log(avatarOccupancy);
+
+  if (!avatarOccupancy) {
     return null;
   }
 
-  const width = 800;
-  const height = 300;
+  const width = 600;
+  const height = 400;
 
-  const data = DataSet(hourlyOccupancy);
-
-  console.log(data);
+  const data = DataSet(avatarOccupancy);
 
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;
@@ -67,7 +75,7 @@ export const Heatmap = (props) => {
     return d3
       .scaleBand()
       .range([boundsHeight, 0])
-      .domain(allYGroups)
+      .domain(allYGroups.reverse())
       .padding(0.01);
   }, [allYGroups, boundsHeight]);
 
@@ -113,7 +121,7 @@ export const Heatmap = (props) => {
         dominantBaseline="middle"
         fontSize={10}
       >
-        {name}
+        {i % 5 === 0 && name}
       </text>
     );
   });
@@ -136,7 +144,7 @@ export const Heatmap = (props) => {
 
   return (
     <div>
-      <svg width={width} height={height}>
+      <svg width={width} height={height + 150}>
         <g
           width={boundsWidth}
           height={boundsHeight}
@@ -146,8 +154,13 @@ export const Heatmap = (props) => {
           {xLabels}
           {yLabels}
         </g>
+        <HeatmapLegend
+          colorScale={colorScale}
+          width={450}
+          height={50}
+          transStyle={`translate(50, ${height})`}
+        />
       </svg>
-      <Tooltip pos={pos} info={info} />
     </div>
   );
 };
