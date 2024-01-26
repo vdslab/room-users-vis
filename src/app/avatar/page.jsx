@@ -90,7 +90,9 @@ export default function AvatarPage(props) {
 
       <Grid item xs={5.5}>
         <Text message="年間の滞在時間" />
-        <AvatarHeatmap avatarOccupancy={frequency} />
+        <Card variant="outlined" style={{ height: "70vh", width: "95%" }}>
+          <AvatarHeatmap avatarOccupancy={frequency} />
+        </Card>
       </Grid>
     </Grid>
   );

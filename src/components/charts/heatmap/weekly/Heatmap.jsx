@@ -9,6 +9,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault("Asia/Tokyo");
 import ja from "dayjs/locale/ja";
+import { HeatmapLegend } from "../HeatMapLegend";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 
@@ -192,7 +193,7 @@ export const Heatmap = (props) => {
 
   return (
     <div>
-      <svg width={width} height={height}>
+      <svg width={width} height={height + 150}>
         <g
           width={boundsWidth}
           height={boundsHeight}
@@ -202,6 +203,14 @@ export const Heatmap = (props) => {
           {xLabels}
           {yLabels}
         </g>
+        <HeatmapLegend
+          colorScale={colorScale}
+          width={250}
+          height={40}
+          transStyle={`translate(250, ${height + 50})`}
+          moreStyle={`translate(330, 25)`}
+          lessStyle={`translate(-50, 25)`}
+        />
       </svg>
       <Tooltip pos={pos} info={info} />
     </div>

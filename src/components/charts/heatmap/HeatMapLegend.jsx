@@ -1,6 +1,8 @@
 import * as d3 from "d3";
 
-export const HeatmapLegend = ({ colorScale, width, height, transStyle }) => {
+export const HeatmapLegend = (props) => {
+  const { colorScale, width, height, transStyle, lessStyle, moreStyle } = props;
+
   const legendScale = d3
     .scaleLinear()
     .domain(colorScale.domain())
@@ -34,9 +36,9 @@ export const HeatmapLegend = ({ colorScale, width, height, transStyle }) => {
 
   return (
     <g transform={transStyle}>
-      <text transform={`translate(${width + 50}, ${height / 2})`}>more</text>
+      <text transform={moreStyle}>more</text>
       {legendRects}
-      <text transform={`translate(20, ${height / 2})`}>less</text>
+      <text transform={lessStyle}>less</text>
     </g>
   );
 };
