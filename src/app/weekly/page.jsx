@@ -4,6 +4,7 @@ import { Text } from "../../components/common/Text";
 import { Rank } from "../../components/charts/rank/Rank";
 import { useEffect, useState } from "react";
 import { Heatmap } from "@/components/charts/heatmap/weekly/Heatmap";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
 
@@ -126,7 +127,7 @@ export default function WeeklyPage() {
     <Grid container spacing={2}>
       <Grid container item xs={7}>
         <Grid item xs={12}>
-          {/* picker実装 */}
+          <DatePicker label="Basic date picker" />
         </Grid>
         <Grid item xs={12}>
           <Heatmap hourlyOccupancy={hourlyOccupancy} data={heatmapData} />
