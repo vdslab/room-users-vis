@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { PrismaClient } from "@prisma/client";
 import exp from "constants";
 import { NextResponse } from "next/server";
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
   }
 
   const colorScale = d3.scaleOrdinal(d3.schemeSet3);
-  const randomColor = colorScale(String(Math.random()));
+  const randomColor = colorScale(Math.random().toString());
 
   // If user does not exist, create user
 
