@@ -38,7 +38,7 @@ export const Rank = (props) => {
         .map((item, index) => (
           <RankBar
             maxTotal={maxTotal}
-            name={item.studentName}
+            id={item.studentId}
             total={
               timeUnit === "日数"
                 ? item.totalDays

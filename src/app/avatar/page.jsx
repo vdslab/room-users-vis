@@ -47,7 +47,7 @@ export default function AvatarPage(props) {
   const [friendRank, setFriendRank] = useState(null);
   const [frequency, setFrequency] = useState(null);
 
-  const id = searchParams.name;
+  const id = searchParams.id;
 
   useEffect(() => {
     const fetchData = async () => {
