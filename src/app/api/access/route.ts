@@ -3,6 +3,13 @@ import { NextResponse } from "next/server";
 
 import { getStudentID } from "@/utils/StudentID";
 
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Tokyo");
+
 const prisma = new PrismaClient();
 
 const ERROR_MESSAGES = {
@@ -65,26 +72,7 @@ async function createAccessRecord(
   check_in: string,
   check_out: string,
 ) {
-  if (check_in && !check_out) {
-    // Check for records where user_id and check_in are the same but check_out is null
-    const accessed = await prisma.access.findFirst({
-      where: {
-        user_id,
-        check_in: new Date(check_in),
-      },
-    });
-
-    // If the user has already checked in, delete the column.
-    if (!accessed) {
-      // Create a new record.
-      await prisma.access.create({
-        data: {
-          user_id,
-          check_in: new Date(check_in),
-        },
-      });
-    }
-  } else if (check_in && check_out) {
+  if (check_in && check_out) {
     if (check_in !== check_out) {
       await prisma.access.create({
         data: {
@@ -94,6 +82,33 @@ async function createAccessRecord(
         },
       });
     }
+  } else if (check_in) {
+    // delete the record if the user has already checked in.
+    const accessed = await prisma.access.findFirst({
+      where: {
+        user_id,
+        check_out: null,
+      },
+    });
+
+    if (accessed) {
+      await prisma.access.delete({
+        where: {
+          user_id_check_in: {
+            user_id: accessed.user_id,
+            check_in: accessed.check_in,
+          },
+        },
+      });
+    }
+    // Create a new record.
+    await prisma.access.create({
+      data: {
+        user_id,
+        check_in: new Date(check_in),
+        check_out: null,
+      },
+    });
   } else if (check_out) {
     // check if user Checked in
     const accessed = await prisma.access.findFirst({
@@ -103,35 +118,15 @@ async function createAccessRecord(
       },
     });
 
-    // If the user has already checked in, check out.
-    const check_out_date = new Date(check_out);
+    if (!accessed) {
+      return;
+    }
 
-    if (accessed) {
-      if (accessed.check_in.getDate() == check_out_date.getDate()) {
-        if (accessed.check_in !== check_out_date) {
-          await prisma.access.update({
-            where: {
-              user_id_check_in: {
-                user_id: accessed.user_id,
-                check_in: accessed.check_in,
-              },
-            },
-            data: {
-              check_out: check_out_date,
-            },
-          });
-        } else {
-          await prisma.access.delete({
-            where: {
-              user_id_check_in: {
-                user_id: accessed.user_id,
-                check_in: accessed.check_in,
-              },
-            },
-          });
-        }
-      } else {
-        // If the check-in is not timestamp date, set the check-out for that record to 10 minutes after the check-in.
+    const check_in_date = dayjs(accessed.check_in).tz();
+    const check_out_date = dayjs(check_out).tz();
+
+    if (check_in_date.isSame(check_out_date, "day")) {
+      if (Math.abs(check_in_date.diff(check_out_date, "minute")) > 10) {
         await prisma.access.update({
           where: {
             user_id_check_in: {
@@ -140,10 +135,32 @@ async function createAccessRecord(
             },
           },
           data: {
-            check_out: new Date(accessed.check_in.getTime() + 10 * 60000),
+            check_out: check_out_date.toDate(),
+          },
+        });
+      } else {
+        await prisma.access.delete({
+          where: {
+            user_id_check_in: {
+              user_id: accessed.user_id,
+              check_in: accessed.check_in,
+            },
           },
         });
       }
+    } else {
+      // If the check-in is not timestamp date, set the check-out for that record to 10 minutes after the check-in.
+      await prisma.access.update({
+        where: {
+          user_id_check_in: {
+            user_id: accessed.user_id,
+            check_in: accessed.check_in,
+          },
+        },
+        data: {
+          check_out: check_in_date.add(10, "minute").toDate(),
+        },
+      });
     }
   }
 }

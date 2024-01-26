@@ -4,8 +4,16 @@ import { Text } from "../../components/common/Text";
 import { Rank } from "../../components/charts/rank/Rank";
 import { useEffect, useState } from "react";
 import { Heatmap } from "@/components/charts/heatmap/weekly/Heatmap";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Tokyo");
 
 // 週番号を取得する関数
 const getWeekNumber = (date) => {
@@ -92,7 +100,7 @@ export default function WeeklyPage() {
   const [heatmapData, setHeatmapData] = useState(null);
   const [pickerTime, setPickerTime] = useState(null);
 
-  const today = dayjs();
+  const today = dayjs().tz();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -122,13 +130,28 @@ export default function WeeklyPage() {
     fetchData();
   }, []);
 
+  const onPickerChange = (newDate) => {
+    setPickerTime(newDate);
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid container item xs={7}>
         <Grid item xs={12}>
-          {/* picker実装 */}
+          <div className="flex justify-center items-center h-full">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="DatePicker"
+                value={pickerTime}
+                onChange={onPickerChange}
+                format="YYYY/MM/DD"
+                mask="____/__/__"
+              />
+            </LocalizationProvider>
+          </div>
         </Grid>
         <Grid item xs={12}>
+          <Text message="時間帯別滞在人数" />
           <Heatmap hourlyOccupancy={hourlyOccupancy} data={heatmapData} />
         </Grid>
       </Grid>
@@ -139,7 +162,10 @@ export default function WeeklyPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <Card variant="outlined" sx={{ height: "80vh", overflow: "scroll" }}>
+          <Card
+            variant="outlined"
+            sx={{ width: "95%", height: "80vh", overflow: "scroll" }}
+          >
             <Rank data={weeklyRank} timeUnit="" />
           </Card>
         </Grid>
