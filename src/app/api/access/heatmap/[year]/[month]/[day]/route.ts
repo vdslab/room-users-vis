@@ -11,16 +11,31 @@ dayjs.tz.setDefault("Asia/Tokyo");
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request) {
-  const today: dayjs.Dayjs = dayjs().tz().startOf("day");
+export async function GET(
+  request: Request,
+  context: { params: { year: number; month: number; day: number } },
+) {
+  if (context.params.month < 1 || context.params.month > 12) {
+    return NextResponse.json({ message: "Invalid month" }, { status: 400 });
+  }
+  if (context.params.day < 1 || context.params.day > 31) {
+    return NextResponse.json({ message: "Invalid day" }, { status: 400 });
+  }
+
+  const selected_date: dayjs.Dayjs = dayjs
+    .tz(
+      `${context.params.year}-${context.params.month}-${context.params.day}`,
+      "Asia/Tokyo",
+    )
+    .startOf("day");
 
   const accesses = await prisma.access.findMany({
     where: {
       OR: [
         {
           check_in: {
-            gte: today.subtract(6, "day").toDate(),
-            lt: today.toDate(),
+            gte: selected_date.subtract(6, "day").toDate(),
+            lt: selected_date.toDate(),
           },
           check_out: {
             not: null,
@@ -28,7 +43,7 @@ export async function GET(request: Request) {
         },
         {
           check_in: {
-            gte: today.toDate(),
+            gte: selected_date.toDate(),
           },
         },
       ],
@@ -37,8 +52,8 @@ export async function GET(request: Request) {
 
   const heatmap: Record<string, Record<string, string[]>> = {};
 
-  let date = today.subtract(6, "day");
-  while (date.isBefore(today.add(1, "day"))) {
+  let date = selected_date.subtract(6, "day");
+  while (date.isBefore(selected_date.add(1, "day"))) {
     const dateStr = date.format("YYYY-MM-DD");
     heatmap[dateStr] = {};
     let hour = 0;

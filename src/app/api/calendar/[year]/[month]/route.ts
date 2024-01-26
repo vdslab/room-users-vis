@@ -17,8 +17,8 @@ export async function GET(
   // Get year variable from URL
   let { year, month } = context.params;
 
-  const gte = dayjs(`${year}-${month}-01`).toDate();
-  const lt = dayjs(`${year}-${month}-31`).toDate();
+  const gte = dayjs(`${year}-${month}-01`).tz().toDate();
+  const lt = dayjs(`${year}-${month}-31`).tz().toDate();
 
   // If month is not greater than 1 and not less than 12 .
   if (!(month >= 1 && month <= 12)) {
@@ -43,7 +43,7 @@ export async function GET(
       users[user.user_id] = [];
     }
     // The array should contain the date of check_in in the format "yyyy-mm-dd" without duplicates.
-    const date = dayjs(user.check_in).format("YYYY-MM-DD");
+    const date = dayjs(user.check_in).tz().format("YYYY-MM-DD");
     if (!users[user.user_id].includes(date)) {
       users[user.user_id].push(date);
     }

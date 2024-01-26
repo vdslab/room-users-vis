@@ -10,8 +10,6 @@ const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 export const Heatmap = (props) => {
   const { data } = props;
 
-  console.log(data);
-
   const width = 800;
   const height = 300;
 
@@ -94,8 +92,13 @@ export const Heatmap = (props) => {
           y: event.pageY,
         });
         setInfo({
-          title: datetime.locale(ja).format("YYYY/MM/DD（ddd）HH時"),
-          info: d.length + "人 （詳細はクリック）",
+          title: d.length + "人",
+          info: (
+            <>
+              {datetime.locale(ja).format("YYYY/MM/DD（ddd）HH時")} <br />
+              {d.map((e) => e).join(", ")}
+            </>
+          ),
         });
       };
 

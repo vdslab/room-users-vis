@@ -9,6 +9,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Tokyo");
 
 // 週番号を取得する関数
 const getWeekNumber = (date) => {
@@ -95,7 +100,7 @@ export default function WeeklyPage() {
   const [heatmapData, setHeatmapData] = useState(null);
   const [pickerTime, setPickerTime] = useState(null);
 
-  const today = dayjs();
+  const today = dayjs().tz();
 
   useEffect(() => {
     const fetchData = async () => {
