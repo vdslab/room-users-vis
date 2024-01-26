@@ -25,9 +25,9 @@ export const AvatarCard = (props) => {
   return (
     <div className="bg-MIDNIGHT_BLUE w-full h-screen flex flex-col items-center justify-evenly ">
       {user.icon ? (
-        <Avatar sx={{ width: 200, height: 200 }} />
+        <Avatar sx={{ width: 200, height: 200 }} src={user.icon} />
       ) : (
-        <Avatar sx={{ width: 200, height: 200 }}>
+        <Avatar sx={{ width: 200, height: 200, bgcolor: user.color }}>
           <Typography>{user.name}</Typography>
         </Avatar>
       )}

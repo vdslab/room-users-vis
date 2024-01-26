@@ -162,7 +162,10 @@ export default function WeeklyPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <Card variant="outlined" sx={{ height: "80vh", overflow: "scroll" }}>
+          <Card
+            variant="outlined"
+            sx={{ width: "95%", height: "80vh", overflow: "scroll" }}
+          >
             <Rank data={weeklyRank} timeUnit="" />
           </Card>
         </Grid>
