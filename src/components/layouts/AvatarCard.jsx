@@ -27,7 +27,7 @@ export const AvatarCard = (props) => {
   return (
     <div className="bg-MIDNIGHT_BLUE w-full h-screen flex flex-col items-center justify-evenly ">
       <Avatar sx={{ width: 200, height: 200 }}>
-        <Typography>{id}</Typography>
+        <Typography>{user}</Typography>
       </Avatar>
       <div className="bg-BAHAMA_BLUE w-4/5 h-1/6 rounded text-center">
         <Typography
