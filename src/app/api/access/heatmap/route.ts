@@ -12,7 +12,7 @@ dayjs.tz.setDefault("Asia/Tokyo");
 const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
-  const today: dayjs.Dayjs = dayjs().startOf("day");
+  const today: dayjs.Dayjs = dayjs().tz().startOf("day");
 
   const accesses = await prisma.access.findMany({
     where: {
@@ -52,17 +52,12 @@ export async function GET(request: Request) {
 
   for (const access of accesses) {
     const id = access.user_id;
-    const checkIn = dayjs(access.check_in).startOf("hour");
+    const checkIn = dayjs(access.check_in).tz().startOf("hour");
     const checkOut = access.check_out
-      ? dayjs(access.check_out)
-      : dayjs().endOf("hour");
+      ? dayjs(access.check_out).tz()
+      : dayjs().tz().endOf("hour");
     let date = checkIn;
 
-    if (!access.check_out) {
-      console.log(id);
-      console.log(checkIn, checkOut);
-      console.log(date.format("YYYY-MM-DD HH:mm"));
-    }
     while (date.isBefore(checkOut)) {
       const dateStr = date.format("YYYY-MM-DD");
       const hourStr = date.format("HH:00");
@@ -76,7 +71,6 @@ export async function GET(request: Request) {
         heatmap[dateStr][hourStr].push(id);
       }
       date = date.add(1, "hour");
-      if (!access.check_out) console.log(date.format("YYYY-MM-DD HH:mm"));
     }
   }
 

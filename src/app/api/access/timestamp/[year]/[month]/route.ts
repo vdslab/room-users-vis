@@ -17,7 +17,7 @@ export async function GET(
   // Get year variable from URL
   let { year, month } = context.params;
 
-  const date = dayjs();
+  const date = dayjs().tz();
 
   // Check if month is a valid value
   if (
@@ -37,7 +37,7 @@ export async function GET(
     } else {
       // Filtering only those all_access check_in months that match the constant month
       const access = all_access.filter(
-        (access) => dayjs(access.check_in).month() + 1 === Number(month),
+        (access) => dayjs(access.check_in).tz().month() + 1 === Number(month),
       );
 
       return NextResponse.json(access, { status: 200 });
@@ -56,6 +56,7 @@ export async function GET(
       where: {
         check_in: {
           gte: dayjs(year === "year" ? undefined : year)
+            .tz()
             .startOf("year")
             .toDate(),
           lt: dayjs(year === "year" ? undefined : year)
