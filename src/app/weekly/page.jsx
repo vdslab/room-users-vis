@@ -40,7 +40,9 @@ export default function WeeklyPage() {
         console.log(error);
       }
       try {
-        const response = await fetch(`/api/access/heatmap`);
+        const response = await fetch(
+          `/api/access/heatmap/${pickerTime.format("YYYY/MM/DD")}`,
+        );
         const result = await response.json();
         setHeatmapData(result);
       } catch (error) {
