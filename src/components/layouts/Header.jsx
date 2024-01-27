@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 export const Header = () => {
-  const buttons = ["monthly", "weekly"];
+  const buttons = ["weekly"];
 
   const btnStyle = {
     color: "inherit",

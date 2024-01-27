@@ -42,7 +42,7 @@ export const Rank = (props) => {
             total={
               timeUnit === "日数"
                 ? item.totalDays
-                : (item.totalTime / (1000 * 60 * 60)).toFixed(2)
+                : (item.totalTime / (1000 * 60 * 60)).toFixed(1)
             }
             label={timeUnit === "日数" ? "日" : "h"}
             index={index}

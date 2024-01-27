@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { HeatmapLegend } from "./HeatmapLegend";
+import { HeatmapLegend } from "../HeatMapLegend";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 
@@ -45,7 +45,7 @@ export const AvatarHeatmap = (props) => {
   console.log(avatarOccupancy);
 
   if (!avatarOccupancy) {
-    return null;
+    return <div>loading</div>;
   }
 
   const width = 600;
@@ -151,9 +151,11 @@ export const AvatarHeatmap = (props) => {
         </g>
         <HeatmapLegend
           colorScale={colorScale}
-          width={450}
+          width={350}
           height={50}
-          transStyle={`translate(50, ${height})`}
+          transStyle={`translate(100, ${height + 50})`}
+          moreStyle={`translate(400, 30)`}
+          lessStyle={`translate(0, 30)`}
         />
       </svg>
     </div>
