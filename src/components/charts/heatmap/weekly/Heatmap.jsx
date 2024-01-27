@@ -13,6 +13,12 @@ import { HeatmapLegend } from "../HeatMapLegend";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 
+export async function getUserName(id) {
+  const response = await fetch(`/api/user/${id}`);
+  const result = await response.json();
+  return result.name;
+}
+
 export const Heatmap = (props) => {
   const { data } = props;
 
@@ -81,14 +87,8 @@ export const Heatmap = (props) => {
       const datetime = dayjs(day + hour).tz();
 
       const handleMouseOver = (event) => {
-        if (!selected || selected.id !== event.target.id) {
-          event.target.setAttribute("stroke", "black");
-          event.target.setAttribute("stroke-width", 2);
-        }
-
-        if (selected) {
-          selected.parentNode.appendChild(selected);
-        }
+        event.target.setAttribute("stroke", "black");
+        event.target.setAttribute("stroke-width", 2);
 
         event.target.parentNode.appendChild(event.target);
 
@@ -97,44 +97,24 @@ export const Heatmap = (props) => {
           x: event.pageX,
           y: event.pageY,
         });
+
         setInfo({
           title: d.length + "人",
           info: (
             <>
               {datetime.locale(ja).format("YYYY/MM/DD（ddd）HH時")} <br />
-              {d.map((e) => e).join(", ")}
+              {d.map((id) => (
+                <div key={id}>{getUserName(id)}</div>
+              ))}
             </>
           ),
         });
       };
 
       const handleMouseLeave = (event) => {
-        if (!selected || selected.id !== event.target.id) {
-          event.target.setAttribute("stroke", "white");
-          event.target.setAttribute("stroke-width", 1);
-        }
-
-        // Tooltip
+        event.target.setAttribute("stroke", "white");
+        event.target.setAttribute("stroke-width", 1);
         setInfo(null);
-      };
-
-      const handleMouseClick = (event) => {
-        event.target.setAttribute("stroke", "PaleVioletRed");
-        event.target.setAttribute("stroke-width", 2);
-
-        if (selected) {
-          if (selected.id !== event.target.id) {
-            selected.setAttribute("stroke", "white");
-            selected.setAttribute("stroke-width", 1);
-          } else {
-            event.target.setAttribute("stroke", "black");
-            setSelected(null);
-            return;
-          }
-        }
-
-        setSelected(event.target);
-        event.target.parentNode.appendChild(event.target);
       };
 
       return (
@@ -153,7 +133,7 @@ export const Heatmap = (props) => {
           strokeWidth={1}
           onMouseOver={handleMouseOver}
           onMouseLeave={handleMouseLeave}
-          onClick={handleMouseClick}
+          // onClick={handleMouseClick}
         />
       );
     });
