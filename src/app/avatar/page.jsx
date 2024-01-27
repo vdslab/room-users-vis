@@ -22,7 +22,6 @@ const convertData = (userData) => {
   userData.forEach(({ check_in, check_out }) => {
     const checkInDate = new Date(check_in);
     const dayOfWeek = checkInDate.getDay(); // 0 (Sunday) to 6 (Saturday)
-    console.log(checkInDate, dayOfWeek);
 
     let initMonth = 0;
     if (checkInDate.getMonth() + 1 === 12) {

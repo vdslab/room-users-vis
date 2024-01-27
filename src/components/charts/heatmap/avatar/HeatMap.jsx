@@ -34,8 +34,6 @@ const DataSet = (avatarOccupancy) => {
     }
   }
 
-  console.log(data);
-
   return data;
 };
 
