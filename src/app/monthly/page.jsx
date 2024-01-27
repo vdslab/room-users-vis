@@ -90,8 +90,6 @@ export default function MonthlyPage() {
         const rankingDayData = createDayRankingData(result);
         const rankingTimeData = createTimeRankingData(result);
 
-        console.log(rankingTimeData);
-
         setDayRank(rankingDayData);
         setTimeRank(rankingTimeData);
       } catch (error) {
@@ -111,8 +109,6 @@ export default function MonthlyPage() {
   } else {
     data = timeRank;
   }
-
-  console.log(timeRank);
 
   return (
     <Grid container spacing={2}>

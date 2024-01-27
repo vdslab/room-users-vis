@@ -56,8 +56,6 @@ export default function WeeklyPage() {
     setPickerTime(newDate);
   };
 
-  console.log(pickerTime);
-
   return (
     <Grid container spacing={2}>
       <Grid container item xs={7}>

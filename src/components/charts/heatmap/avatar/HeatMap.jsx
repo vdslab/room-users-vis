@@ -42,8 +42,6 @@ const DataSet = (avatarOccupancy) => {
 export const AvatarHeatmap = (props) => {
   const { avatarOccupancy } = props;
 
-  console.log(avatarOccupancy);
-
   if (!avatarOccupancy) {
     return <div>loading</div>;
   }
