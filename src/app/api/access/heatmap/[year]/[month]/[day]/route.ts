@@ -80,6 +80,9 @@ export async function GET(
     const checkOut = access.check_out
       ? dayjs(access.check_out).endOf("hour").tz()
       : dayjs().endOf("hour").tz();
+    if (!checkIn.isSame(checkOut, "day")) {
+      continue;
+    }
     let date = checkIn;
 
     while (date.isBefore(checkOut)) {
