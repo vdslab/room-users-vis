@@ -56,11 +56,9 @@ export default function WeeklyPage() {
     setPickerTime(newDate);
   };
 
-  console.log(pickerTime);
-
   return (
     <Grid container spacing={2}>
-      <Grid container item xs={7}>
+      <Grid container item xs={12} md={7}>
         <Grid item xs={12}>
           <div className="flex justify-center items-center h-full">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -80,7 +78,7 @@ export default function WeeklyPage() {
         </Grid>
       </Grid>
 
-      <Grid container item xs={5}>
+      <Grid container item xs={12} md={5}>
         <Grid item xs={12}>
           <Text message="週間滞在時間ランキング" />
         </Grid>

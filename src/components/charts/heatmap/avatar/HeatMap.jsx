@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import { HeatmapLegend } from "../HeatMapLegend";
+import { useMediaQuery } from "@mui/material";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 30 };
 
@@ -34,22 +35,22 @@ const DataSet = (avatarOccupancy) => {
     }
   }
 
-  console.log(data);
-
   return data;
 };
 
 export const AvatarHeatmap = (props) => {
   const { avatarOccupancy } = props;
 
-  console.log(avatarOccupancy);
+  const isXs = useMediaQuery((theme) => theme.breakpoints.down("xs"));
 
   if (!avatarOccupancy) {
     return <div>loading</div>;
   }
 
-  const width = 600;
-  const height = 400;
+  console.log(isXs);
+
+  const width = isXs ? 200 : 600;
+  const height = isXs ? 100 : 400;
 
   const data = DataSet(avatarOccupancy);
 
