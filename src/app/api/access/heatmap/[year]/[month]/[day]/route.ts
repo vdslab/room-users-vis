@@ -11,16 +11,40 @@ dayjs.tz.setDefault("Asia/Tokyo");
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request) {
-  const today: dayjs.Dayjs = dayjs().tz().startOf("day");
+export async function GET(
+  request: Request,
+  context: { params: { year: number; month: number; day: number } },
+) {
+  // Get year variable from URL
+  const year = context.params.year;
+
+  // Get month variable from URL
+  const month = context.params.month;
+
+  // Get day variable from URL
+  const day = context.params.day;
+
+  // Check if month is a valid value
+  if (!(month >= 1 && month <= 12)) {
+    return NextResponse.json({ message: "Invalid month" }, { status: 400 });
+  }
+
+  // Check if day is a valid value
+  if (!(day >= 1 && day <= 31)) {
+    return NextResponse.json({ message: "Invalid day" }, { status: 400 });
+  }
+
+  const select_date: dayjs.Dayjs = dayjs
+    .tz(`${year}/${month}/${day}`)
+    .startOf("day");
 
   const accesses = await prisma.access.findMany({
     where: {
       OR: [
         {
           check_in: {
-            gte: today.subtract(6, "day").toDate(),
-            lt: today.toDate(),
+            gte: select_date.subtract(6, "day").toDate(),
+            lt: select_date.toDate(),
           },
           check_out: {
             not: null,
@@ -28,7 +52,7 @@ export async function GET(request: Request) {
         },
         {
           check_in: {
-            gte: today.toDate(),
+            gte: select_date.toDate(),
           },
         },
       ],
@@ -37,8 +61,8 @@ export async function GET(request: Request) {
 
   const heatmap: Record<string, Record<string, string[]>> = {};
 
-  let date = today.subtract(6, "day");
-  while (date.isBefore(today.add(1, "day"))) {
+  let date = select_date.subtract(6, "day");
+  while (date.isBefore(select_date.add(1, "day"))) {
     const dateStr = date.format("YYYY-MM-DD");
     heatmap[dateStr] = {};
     let hour = 0;
@@ -56,6 +80,9 @@ export async function GET(request: Request) {
     const checkOut = access.check_out
       ? dayjs(access.check_out).endOf("hour").tz()
       : dayjs().endOf("hour").tz();
+    if (!checkIn.isSame(checkOut, "day")) {
+      continue;
+    }
     let date = checkIn;
 
     while (date.isBefore(checkOut)) {
